@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      eval_reminder:
+        description: "Print L2 EVAL checklist reminder (manual agent eval)"
+        type: boolean
+        default: true
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Structure validate (L0)
+        run: python scripts/validate_skills.py
+
+      - name: No emoji in skill packages
+        run: python scripts/check_no_emoji.py
+
+      - name: Unit tests (L1)
+        run: python -m pytest -v
+
+      - name: Pack skills smoke
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zip unzip
+          bash scripts/pack_skills.sh
+          test -f wiki-gardener.skill
+          test -f domain-expert.skill
+
+      - name: L2 EVAL reminder
+        if: github.event_name == 'workflow_dispatch' && inputs.eval_reminder
+        run: |
+          echo "L0/L1 passed. L2 behavioral EVAL is agent-driven:"
+          echo "  1. Copy tests/fixtures/sample-vault to a temp dir"
+          echo "  2. Install skills into the agent skills path"
+          echo "  3. Walk through tests/EVAL.md (at least A1-S x4 personas, A2, A4, B1, C1)"
+          echo "  4. Score interview constitutions:"
+          echo "       python3 scripts/score_constitution.py --persona engineering-craft --constitution \$VAULT/00_系统/宪章.md --vault \$VAULT"
+          echo "See tests/EVAL.md and tests/fixtures/interview-personas/"
