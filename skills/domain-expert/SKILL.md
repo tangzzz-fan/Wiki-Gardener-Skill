@@ -66,3 +66,4 @@ metadata:
 - `references/writing-mode.md` —— 执笔模式：对话追问清单、吸附原生写作流程、成文规范
 - `references/review-mode.md` —— 审查模式：核验清单、审查报告 Schema、分级处理
 - `assets/templates/review-report.md` —— 人话版审查报告模板
+- `docs/使用说明与调优指南.md` —— 面向使用者的安装、日常用法与调优

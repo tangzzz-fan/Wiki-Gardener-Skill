@@ -1,7 +1,7 @@
 """Persona / domain-seed 资产契约：schema、交叉引用、setup-wizard 第零轮对齐。
 
 与 tests/fixtures/interview-personas/（访谈风格指纹）严格分离：
-本文件只锁 wiki-gardener/assets/personas 与 assets/domain-seeds。
+本文件只锁 skills/wiki-gardener/assets/personas 与 assets/domain-seeds。
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-WG = ROOT / "wiki-gardener"
+WG = ROOT / "skills" / "wiki-gardener"
 PERSONAS_DIR = WG / "assets" / "personas"
 SEEDS_DIR = WG / "assets" / "domain-seeds"
 WIZARD = WG / "references" / "setup-wizard.md"

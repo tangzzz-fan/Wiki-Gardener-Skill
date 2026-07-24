@@ -10,8 +10,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WG = ROOT / "wiki-gardener"
-DE = ROOT / "domain-expert"
+WG = ROOT / "skills" / "wiki-gardener"
+DE = ROOT / "skills" / "domain-expert"
 SEEDS = WG / "assets" / "domain-seeds"
 PERSONAS = WG / "assets" / "personas"
 

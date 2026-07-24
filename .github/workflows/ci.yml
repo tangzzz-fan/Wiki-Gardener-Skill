@@ -41,6 +41,7 @@ jobs:
           bash scripts/pack_skills.sh
           test -f wiki-gardener.skill
           test -f domain-expert.skill
+          test -f setup-knowledge-skills.skill
 
       - name: L2 EVAL reminder
         if: github.event_name == 'workflow_dispatch' && inputs.eval_reminder
@@ -51,4 +52,4 @@ jobs:
           echo "  3. Walk through tests/EVAL.md (at least A1-P, A1-S x4 personas, A2, A4, B1, C1)"
           echo "  4. Score interview constitutions:"
           echo "       python3 scripts/score_constitution.py --persona engineering-craft --constitution \$VAULT/00_系统/宪章.md --vault \$VAULT"
-          echo "See tests/EVAL.md, tests/fixtures/interview-personas/, and wiki-gardener/assets/personas/"
+          echo "See tests/EVAL.md, tests/fixtures/interview-personas/, and skills/wiki-gardener/assets/personas/"

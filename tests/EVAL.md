@@ -1,7 +1,7 @@
 # Skill 行为评测清单（Eval Harness）
 
 > 自动化测不了 Agent 是否「按铁律行事」。本清单用 fixture vault + 固定提示词做**可复现的行为评测**。
-> 建议：新开会话、把本仓库的两个 skill 装进 Agent，对 `tests/fixtures/sample-vault` 逐条跑。
+> 建议：新开会话、用 `./scripts/install_skills.sh` 装入 Agent（含 setup），对 `tests/fixtures/sample-vault` 逐条跑。
 > Fixture 里的 ios/iot 等是**示例域**，用于固定场景，不代表 skill 只服务这些行业。
 > 人话输出不得含 emoji（见 AGENTS.md）。
 
@@ -20,6 +20,18 @@
 ```bash
 cp -R tests/fixtures/sample-vault /tmp/wiki-eval-vault
 ```
+
+---
+
+## A0. setup-knowledge-skills（安装后引导）
+
+**准备**：已用 `./scripts/install_skills.sh` 或 `npx skills add … --skill '*'` 装全包；空目录或任意工作区  
+**触发**：「运行 setup-knowledge-skills」或「刚装完知识库技能，带我开始」  
+**必须**：
+- [ ] 确认 / 询问 vault 路径，不替用户定北极星
+- [ ] 说明园丁 vs 专家分工
+- [ ] 新库时交接「帮我初始化一个知识库」（wiki-gardener），不跳过访谈直接写满宪章
+- [ ] 无人话 emoji
 
 ---
 
@@ -58,7 +70,7 @@ cp -R tests/fixtures/sample-vault /tmp/wiki-eval-vault
 - [ ] 已按确认后的 Atlas 分区创建一层 `20_领域/<分区名>/`（如课程体系、教案与课堂等），与总 MOC 对齐
 - [ ] 无人话 emoji
 
-产品侧画像包：`wiki-gardener/assets/personas/`；域种子：`wiki-gardener/assets/domain-seeds/`。  
+产品侧画像包：`skills/wiki-gardener/assets/personas/`；域种子：`skills/wiki-gardener/assets/domain-seeds/`。
 勿与 `tests/fixtures/interview-personas/`（A1-S 风格指纹）混淆。
 
 **工程师 persona 附加（选「全栈工程师」或「iOS原生与跨平台工程师」时）：**

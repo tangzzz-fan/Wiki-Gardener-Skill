@@ -61,7 +61,7 @@ def test_all_goldens_cli():
 
 def test_q2_metric_map_covers_wizard_options():
     """与 setup-wizard 第二题选项对齐。"""
-    wizard = (ROOT / "wiki-gardener" / "references" / "setup-wizard.md").read_text(
+    wizard = (ROOT / "skills" / "wiki-gardener" / "references" / "setup-wizard.md").read_text(
         encoding="utf-8"
     )
     for option in sc.Q2_METRIC_MAP:

@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "wiki-gardener" / "scripts" / "dup_scan.py"
+SCRIPT = ROOT / "skills" / "wiki-gardener" / "scripts" / "dup_scan.py"
 FIXTURE_VAULT = ROOT / "tests" / "fixtures" / "sample-vault"
 
 

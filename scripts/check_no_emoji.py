@@ -63,15 +63,15 @@ BANNED_CHARS = {
 }
 
 DEFAULT_GLOBS = [
-    "wiki-gardener/**/*",
-    "domain-expert/**/*",
+    "skills/**/*",
     "AGENTS.md",
     "CLAUDE.md",
     "README.md",
     ".github/**/*",
     "scripts/validate_skills.py",
     "scripts/pack_skills.sh",
-    "scripts/dup_scan.py",
+    "scripts/install_skills.sh",
+    "scripts/check_no_emoji.py",
 ]
 
 SKIP_SUFFIXES = {".pyc", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".zip", ".skill"}

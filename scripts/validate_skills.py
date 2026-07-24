@@ -22,7 +22,9 @@ import re
 import sys
 from pathlib import Path
 
-SKILL_DIRS = ("wiki-gardener", "domain-expert")
+SKILLS_CONTAINER = "skills"
+# 至少要有的包（新增 companion 不必写进此元组，放进 skills/ 即可被发现）
+REQUIRED_SKILLS = ("wiki-gardener", "domain-expert", "setup-knowledge-skills")
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 REF_RE = re.compile(
     r"`((?:references|assets|scripts)/[A-Za-z0-9_./\-]+)`"
@@ -269,10 +271,22 @@ def check_persona_and_domain_seeds(skill_dir: Path) -> list[str]:
     return errors
 
 
+def discover_skill_dirs(root: Path) -> list[Path]:
+    """Return skills/<name>/ directories that contain SKILL.md (one level)."""
+    container = root / SKILLS_CONTAINER
+    if not container.is_dir():
+        return []
+    found: list[Path] = []
+    for p in sorted(container.iterdir()):
+        if p.is_dir() and (p / "SKILL.md").is_file():
+            found.append(p)
+    return found
+
+
 def check_dup_scan_import(root: Path) -> list[str]:
-    script = root / "wiki-gardener" / "scripts" / "dup_scan.py"
+    script = root / SKILLS_CONTAINER / "wiki-gardener" / "scripts" / "dup_scan.py"
     if not script.is_file():
-        return ["wiki-gardener: 缺少 scripts/dup_scan.py"]
+        return ["skills/wiki-gardener: 缺少 scripts/dup_scan.py"]
     # 语法检查，不要求本机已装 sklearn（那是运行时依赖）
     import py_compile
 
@@ -295,11 +309,21 @@ def main() -> int:
     root: Path = args.root.resolve()
 
     all_errors: list[str] = []
-    for name in SKILL_DIRS:
-        skill_dir = root / name
-        if not skill_dir.is_dir():
-            all_errors.append(f"缺少 skill 目录: {name}")
-            continue
+    container = root / SKILLS_CONTAINER
+    if not container.is_dir():
+        all_errors.append(f"缺少 {SKILLS_CONTAINER}/ 目录")
+        print("FAIL: structure validation")
+        for e in all_errors:
+            print(f"  - {e}")
+        return 1
+
+    skill_dirs = discover_skill_dirs(root)
+    names = {p.name for p in skill_dirs}
+    for required in REQUIRED_SKILLS:
+        if required not in names:
+            all_errors.append(f"缺少 skill 目录: {SKILLS_CONTAINER}/{required}")
+
+    for skill_dir in skill_dirs:
         all_errors.extend(check_skill(skill_dir))
         all_errors.extend(check_persona_and_domain_seeds(skill_dir))
 
@@ -312,10 +336,12 @@ def main() -> int:
         return 1
 
     print("OK: structure validation passed")
-    for name in SKILL_DIRS:
-        md = (root / name / "SKILL.md").read_text(encoding="utf-8")
+    for skill_dir in skill_dirs:
+        md = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
         meta, _ = parse_frontmatter(md)
-        print(f"  - {name}: description {len(meta['description'])} chars")
+        print(
+            f"  - {skill_dir.name}: description {len(meta['description'])} chars"
+        )
     return 0
 
 

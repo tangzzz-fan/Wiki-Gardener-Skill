@@ -91,3 +91,4 @@ vault/
 - `assets/templates/` —— 宪章、MOC、原子笔记、决策日志、域档案模板
 - `assets/personas/` —— 用户画像预设（初始化第零轮使用；种子而非笼子，预填项须用户确认）
 - `assets/domain-seeds/` —— 可插拔域档案种子（含专家立场；初始化时按需拷入 vault 的 domains/）
+- `docs/使用说明与调优指南.md` —— 面向使用者的安装、日常用法与调优
