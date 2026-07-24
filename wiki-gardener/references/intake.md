@@ -23,6 +23,8 @@
 → 更新 MOC 与双向链接
 ```
 
+落盘位置：新建/合并后的笔记优先放入与总 MOC 分区同名的 `20_领域/<分区名>/`；无匹配分区时暂放 `20_领域/_未归类/`，并提示用户归入或新增分区（一层即可，不擅自深嵌）。
+
 ## 2. 域路由
 
 优先级从高到低，**低置信度时问人，不猜**：
@@ -78,8 +80,8 @@
     "freshness": "ok"
   },
   "decision": "merge",
-  "operation_hint": "合并进 20_领域/ios/ble-配网.md，保留其独有段落 2 段",
-  "related_notes": ["20_领域/ios/ble-配网.md"],
+  "operation_hint": "合并进 20_领域/iOS 踩坑与 API/BLE 配网流程.md，保留其独有段落 2 段",
+  "related_notes": ["20_领域/iOS 踩坑与 API/BLE 配网流程.md"],
   "reason": "与现有笔记 87% 重叠，独有内容为实战踩坑两段",
   "confidence": 0.85,
   "requires_approval": true

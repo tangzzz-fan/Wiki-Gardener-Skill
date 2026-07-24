@@ -121,24 +121,25 @@ def test_default_vs_on_demand_markers():
         assert "按需" in body, f"{path.name}: 须有按需加载域"
 
 
-def test_personas_have_atlas_partitions_not_folders():
-    """分类靠总 MOC 分区，禁止把分区建成 20_领域 子目录。"""
+def test_personas_have_atlas_partitions_with_folders():
+    """Atlas 分区确认后建一层 20_领域/<分区>/；禁止编号深树与默认多层嵌套。"""
     for path in persona_files():
         text = path.read_text(encoding="utf-8")
         body = vs.section_body(text, "推荐 Atlas 分区")
         assert body is not None, f"{path.name}: 缺少推荐 Atlas 分区"
-        assert "20_领域" in body or "总 MOC" in body or "MOC" in body, path.name
-        # 须明确否定实体目录；允许「勿建 / 不要建成 01-xxx」迁移说明
-        assert any(m in body for m in ("不是文件夹", "勿建", "不要", "禁止")), path.name
-        assert "平铺" in body or "总 MOC" in body or "MOC" in body
+        assert "20_领域" in body, path.name
+        assert "一层" in body or "文件夹" in body, path.name
+        assert any(m in body for m in ("禁止", "勿", "不要")), path.name
+        assert "01-xxx" in body or "编号" in body or "多层" in body, path.name
 
 
 def test_teacher_persona_maps_legacy_folders_to_moc():
-    """独立老师：旧编号目录心智映射到 MOC，且明确勿建文件夹。"""
+    """独立老师：旧编号目录心智映射到同名一层分区夹，禁止 01-xxx 深树。"""
     text = (PERSONAS_DIR / "独立老师.md").read_text(encoding="utf-8")
     atlas = vs.section_body(text, "推荐 Atlas 分区")
     assert atlas is not None
-    assert "勿建" in atlas or "不是文件夹" in atlas
+    assert "一层" in atlas and "文件夹" in atlas
+    assert "01-xxx" in atlas or "编号" in atlas
     for section in ("课程体系", "教案与课堂", "题库与练习", "学情档案", "家长沟通"):
         assert section in atlas, section
     assert "保分" in text or "包过" in text
@@ -167,6 +168,8 @@ def test_setup_wizard_applies_atlas_partitions():
     assert "推荐 Atlas 分区" in wizard
     assert "协作边界" in wizard
     assert "20_领域/" in wizard
+    assert "一层" in wizard
+    assert "_未归类" in wizard
 
 
 def test_interview_variants_reference_wizard_qs():

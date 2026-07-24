@@ -38,9 +38,9 @@ def test_collect_notes_skips_system_and_archive(dup_scan):
 
     assert not any(r.startswith("00_系统") for r in rels)
     assert not any(r.startswith("90_archive") for r in rels)
-    assert "20_领域/BLE 配网流程.md" in rels
+    assert "20_领域/iOS/BLE 配网流程.md" in rels
     assert "10_inbox/BLE配网重复草稿.md" in rels
-    assert "20_领域/孤立的天气随笔.md" in rels
+    assert "20_领域/_未归类/孤立的天气随笔.md" in rels
 
 
 def test_near_duplicate_ble_notes_detected():
