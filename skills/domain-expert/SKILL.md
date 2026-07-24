@@ -1,6 +1,6 @@
 ---
 name: domain-expert
-description: 知识库的领域专家：以用户指定的任意领域专家身份执笔撰写笔记或审查草稿（领域由 vault 内域档案定义，不绑定某一垂直行业）。触发场景：(1) 用户想就某个主题与专家对话，然后把讨论成果写成知识库笔记；(2) 用户写好了部分材料/草稿，需要对应领域专家做事实性审查（正确性、时效性、最佳实践、常见误区）；(3) 用户要求"以 xx 专家的身份写/审一篇内容"。与 wiki-gardener 的分工：本 skill 管单篇内容的质量（对不对），wiki-gardener 管库的结构健康（该不该收、放哪、重不重）——两者互补不冲突。
+description: 知识库的领域专家：以用户指定的任意领域专家身份执笔撰写笔记或审查草稿（领域由 vault 内域档案定义，不绑定某一垂直行业）。触发场景：(1) 用户想就某个主题与专家对话，然后把讨论成果写成知识库笔记；(2) 用户只有零散思路/一句话题目（尚无 inbox 文件），要聊透后成文；(3) 用户写好了部分材料/草稿，需要对应领域专家做事实性审查（正确性、时效性、最佳实践、常见误区）；(4) 用户要求"以 xx 专家的身份写/审一篇内容"。与 wiki-gardener 的分工：本 skill 管单篇内容的质量（对不对），wiki-gardener 管库的结构健康（该不该收、放哪、重不重）——两者互补不冲突。
 license: MIT
 compatibility: No runtime scripts; expects a vault with optional 00_系统/domains/ domain packs when used alongside wiki-gardener. Domain packs are user-authored and not limited to any industry.
 metadata:

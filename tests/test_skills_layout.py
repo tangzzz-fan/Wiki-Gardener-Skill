@@ -63,3 +63,18 @@ def test_existing_vault_onboarding_docs_and_wizard():
     )
     assert "已有知识库接入" in setup
     assert "保留旧文件" in setup
+
+
+def test_gardener_hands_off_sparse_ideas_to_writer():
+    gardener = (SKILLS / "wiki-gardener" / "SKILL.md").read_text(encoding="utf-8")
+    assert "零散思路" in gardener
+    assert "domain-expert" in gardener
+    assert "不执笔成文" in gardener or "不是作者" in gardener
+
+    expert = (SKILLS / "domain-expert" / "SKILL.md").read_text(encoding="utf-8")
+    assert "零散思路" in expert
+    assert "10_inbox" in expert
+
+    eval_md = (ROOT / "tests" / "EVAL.md").read_text(encoding="utf-8")
+    assert "B3-E" in eval_md
+    assert "零散思路全链路" in eval_md
