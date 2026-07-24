@@ -112,6 +112,17 @@ def test_engineering_domain_seeds_require_first_principles(name: str):
     assert "第一性原理" in stance or "深入本质" in stance
 
 
+def test_domain_seeds_have_write_review_protocol():
+    """默认种子须含高能力执笔/审查协议，方便 domain-expert 开箱即用。"""
+    for path in seed_files():
+        text = path.read_text(encoding="utf-8")
+        body = vs.section_body(text, "执笔与审查协议")
+        assert body is not None, path.name
+        for marker in ("开场必收", "执笔交付物", "审查必查", "10_inbox"):
+            assert marker in body, f"{path.name}: missing {marker}"
+        assert "能力红线" in body or "红线" in body, path.name
+
+
 def test_default_vs_on_demand_markers():
     for path in persona_files():
         text = path.read_text(encoding="utf-8")

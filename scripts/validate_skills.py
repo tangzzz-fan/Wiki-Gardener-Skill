@@ -55,6 +55,7 @@ DOMAIN_SEED_SECTIONS = (
     "领域 Smell 清单",
     "写作立场",
     "常见误区",
+    "执笔与审查协议",
 )
 ROT_MARKERS = ("腐烂", "更新")
 
@@ -231,6 +232,14 @@ def check_domain_seed_file(path: Path) -> list[str]:
             errors.append(f"domain-seeds/{rel}: 专家立场须含「身份」")
         if "判断偏好" not in stance:
             errors.append(f"domain-seeds/{rel}: 专家立场须含「判断偏好」")
+
+    protocol = section_body(text, "执笔与审查协议")
+    if protocol is not None:
+        for marker in ("开场必收", "执笔交付物", "审查必查", "10_inbox"):
+            if marker not in protocol:
+                errors.append(
+                    f"domain-seeds/{rel}: 执笔与审查协议须含「{marker}」"
+                )
 
     anchor = section_body(text, "时效性锚点")
     if anchor is not None and not any(m in anchor for m in ROT_MARKERS):

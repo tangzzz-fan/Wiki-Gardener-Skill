@@ -12,7 +12,8 @@
 | **domain-expert**（领域专家） | 按你指定的领域审稿 / 执笔 | 该不该收进库、放哪一格 |
 
 协作习惯：**先审对不对，再决定收不收。**  
-更细的用法：[园丁说明](./skills/wiki-gardener/docs/使用说明与调优指南.md) · [专家说明](./skills/domain-expert/docs/使用说明与调优指南.md)
+更细的用法：[园丁说明](./skills/wiki-gardener/docs/使用说明与调优指南.md) · [专家说明](./skills/domain-expert/docs/使用说明与调优指南.md)  
+**克隆后按自己经验改（防坑论、域标准、画像）**：[自定义与调教指南](./docs/自定义与调教指南.md)
 
 ---
 
@@ -120,7 +121,8 @@ cp -R skills/wiki-gardener skills/domain-expert skills/setup-knowledge-skills ~/
 
 ## 给想改包 / 跑测试的人
 
-见 [AGENTS.md](./AGENTS.md)。
+按自己经验自定义（域档案、防坑论、画像）：[docs/自定义与调教指南.md](./docs/自定义与调教指南.md)。  
+给 Agent 的仓库约定：[AGENTS.md](./AGENTS.md)。
 
 ```bash
 pip install -r requirements-dev.txt
@@ -130,12 +132,9 @@ python3 -m pytest -v
 ```
 
 ```
-├── skills/
-│   ├── setup-knowledge-skills/   # 安装后引导
-│   ├── wiki-gardener/            # 园丁
-│   ├── domain-expert/            # 专家
-│   └── README.md                 # 如何新增 companion
-├── scripts/install_skills.sh     # 短命令入口
+├── skills/                       # 对外分发的 skill
+├── docs/自定义与调教指南.md       # 克隆后如何按个人经验改
+├── scripts/install_skills.sh
 └── tests/
 ```
 

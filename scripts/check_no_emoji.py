@@ -67,6 +67,7 @@ DEFAULT_GLOBS = [
     "AGENTS.md",
     "CLAUDE.md",
     "README.md",
+    "docs/**/*",
     ".github/**/*",
     "scripts/validate_skills.py",
     "scripts/pack_skills.sh",

@@ -26,6 +26,7 @@
 | `tests/fixtures/sample-vault/` | 评测用示例库（内含示例域，非产品限定） |
 | `tests/fixtures/interview-personas/` | 访谈风格人设 + 黄金宪章 |
 | `tests/EVAL.md` | L2 行为评测清单 |
+| `docs/自定义与调教指南.md` | 克隆后按个人经验改域档案 / 种子 / 流程 |
 | `scripts/` | `install_skills.sh`、校验、打包、禁 emoji、宪章风格评分 |
 
 用户安装 / 更新：见根目录 README。短命令 `./scripts/install_skills.sh`（内部 `npx skills add … --skill '*'` + 尝试拉起 setup）。Desktop 用 `pack_skills.sh`。
