@@ -145,6 +145,23 @@ def test_teacher_persona_maps_legacy_folders_to_moc():
     assert "协作边界" in text
 
 
+def test_douyin_ops_hands_off_to_director():
+    """算法运营审完应交接短视频编导，不代替写拍摄清单。"""
+    ops = (SEEDS_DIR / "抖音运营.md").read_text(encoding="utf-8")
+    craft = (SEEDS_DIR / "短视频编导.md").read_text(encoding="utf-8")
+    assert "短视频编导" in ops
+    assert "存在性先于形态性" in ops or "存在性先于形态性" in craft
+    assert "资深短视频编导" in craft or "短视频编导" in craft
+    assert "制作指导卡" in craft
+    assert "图文" in craft and "口播" in craft and "出镜" in craft
+    teacher = (PERSONAS_DIR / "独立老师.md").read_text(encoding="utf-8")
+    creator = (PERSONAS_DIR / "自媒体工作者.md").read_text(encoding="utf-8")
+    assert "短视频编导.md" in teacher and "短视频编导" in teacher
+    assert "短视频编导.md" in creator and "短视频编导" in creator
+    assert "存在性先于形态性" in teacher
+    assert "存在性先于形态性" in creator
+
+
 def test_setup_wizard_applies_atlas_partitions():
     wizard = WIZARD.read_text(encoding="utf-8")
     assert "推荐 Atlas 分区" in wizard
