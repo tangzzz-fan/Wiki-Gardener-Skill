@@ -56,13 +56,60 @@ def test_persona_and_domain_seeds_via_validate():
 
 
 def test_persona_seed_cross_refs():
-    """独立老师推荐域对应的三种子均存在。"""
+    """每个 persona 引用的 domain-seeds 均存在（独立老师作显式样例）。"""
     teacher = PERSONAS_DIR / "独立老师.md"
     assert teacher.is_file()
     text = teacher.read_text(encoding="utf-8")
     for name in ("课程设计.md", "招生.md", "抖音运营.md"):
         assert f"domain-seeds/{name}" in text
         assert (SEEDS_DIR / name).is_file(), name
+
+    for path in persona_files():
+        errs = vs.check_persona_file(path, SEEDS_DIR)
+        assert not errs, errs
+
+
+ENGINEER_PERSONA_NAMES = (
+    "全栈工程师.md",
+    "iOS原生与跨平台工程师.md",
+)
+ENGINEERING_SEED_NAMES = (
+    "架构设计.md",
+    "后端开发.md",
+    "前端开发.md",
+    "iOS开发.md",
+    "跨平台开发.md",
+)
+FIRST_PRINCIPLES_MARKERS = ("第一性原理", "深入本质")
+
+
+def engineer_persona_files() -> list[Path]:
+    return [PERSONAS_DIR / name for name in ENGINEER_PERSONA_NAMES]
+
+
+@pytest.mark.parametrize("path", engineer_persona_files(), ids=lambda p: p.name)
+def test_engineer_personas_require_first_principles(path: Path):
+    """软件工程师 persona 必须写入深入本质 + 第一性原理要求。"""
+    assert path.is_file(), path.name
+    text = path.read_text(encoding="utf-8")
+    for marker in FIRST_PRINCIPLES_MARKERS:
+        assert marker in text, f"{path.name}: 缺少「{marker}」"
+    include = vs.section_body(text, "收录标准种子")
+    assert include is not None
+    assert "第一性原理" in include
+    assert "深入本质" in include or "本质" in include
+
+
+@pytest.mark.parametrize("name", ENGINEERING_SEED_NAMES)
+def test_engineering_domain_seeds_require_first_principles(name: str):
+    """工程域种子把第一性原理写进专家立场/写作立场，供执笔与审查读取。"""
+    path = SEEDS_DIR / name
+    assert path.is_file(), name
+    text = path.read_text(encoding="utf-8")
+    assert "第一性原理" in text, f"{name}: 缺少「第一性原理」"
+    stance = vs.section_body(text, "专家立场")
+    assert stance is not None
+    assert "第一性原理" in stance or "深入本质" in stance
 
 
 def test_default_vs_on_demand_markers():

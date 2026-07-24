@@ -60,6 +60,10 @@ cp -R tests/fixtures/sample-vault /tmp/wiki-eval-vault
 产品侧画像包：`wiki-gardener/assets/personas/`；域种子：`wiki-gardener/assets/domain-seeds/`。  
 勿与 `tests/fixtures/interview-personas/`（A1-S 风格指纹）混淆。
 
+**工程师 persona 附加（选「全栈工程师」或「iOS原生与跨平台工程师」时）：**
+- [ ] 收录标准确认题中出现「深入本质 / 第一性原理」相关预填，用户确认或改写后落盘
+- [ ] 默认加载的工程域档案「专家立场」含第一性原理表述
+
 ### A1-S. 知识库风格访谈（多人设）
 
 用 `tests/fixtures/interview-personas/<id>/persona.json` 里的标准答案应答访谈（可复制粘贴）。落盘后评分：
