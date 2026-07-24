@@ -8,6 +8,7 @@ validate_skills.py — 开源前结构校验
   - description 非空且 ≤ 1024 字符
   - SKILL.md 正文 < 500 行
   - 引用的 references/scripts/assets 路径存在
+  - wiki-gardener 的 personas / domain-seeds 资产 schema 与交叉引用
   - wiki-gardener 的 dup_scan.py 可导入
 
 用法：
@@ -26,6 +27,33 @@ NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 REF_RE = re.compile(
     r"`((?:references|assets|scripts)/[A-Za-z0-9_./\-]+)`"
 )
+H2_RE = re.compile(r"^##\s+(.+?)\s*$", re.MULTILINE)
+DOMAIN_SEED_REF_RE = re.compile(r"`domain-seeds/([^`]+?\.md)`")
+DOMAINS_REF_RE = re.compile(r"`domains/([^`]+?\.md)`")
+TITLE_RE = re.compile(r"^#\s+域档案：(.+?)\s*$", re.MULTILINE)
+
+PERSONA_SECTION_PREFIXES = (
+    "北极星候选",
+    "收录标准种子",
+    "推荐初始域",
+    "笔记类型模板",
+    "访谈变体",
+    "度量权重",
+    "专家顾问团",
+)
+PERSONA_CONFIRM_MARKERS = ("用户确认", "亲口确认")
+PERSONA_MECHANISM_FORBIDDEN = ("吸附流程", "dup_scan", "放权", "L3")
+
+DOMAIN_SEED_SECTIONS = (
+    "专家立场",
+    "局部宪章",
+    "术语表",
+    "时效性锚点",
+    "领域 Smell 清单",
+    "写作立场",
+    "常见误区",
+)
+ROT_MARKERS = ("腐烂", "更新")
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
@@ -46,6 +74,26 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
         key, _, value = line.partition(":")
         meta[key.strip()] = value.strip().strip("\"'")
     return meta, parts[2]
+
+
+def h2_titles(text: str) -> list[str]:
+    return [m.group(1).strip() for m in H2_RE.finditer(text)]
+
+
+def has_section_prefix(titles: list[str], prefix: str) -> bool:
+    return any(t == prefix or t.startswith(prefix) for t in titles)
+
+
+def section_body(text: str, prefix: str) -> str | None:
+    """Return body under the first H2 whose title starts with prefix."""
+    matches = list(H2_RE.finditer(text))
+    for i, m in enumerate(matches):
+        title = m.group(1).strip()
+        if title == prefix or title.startswith(prefix):
+            start = m.end()
+            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+            return text[start:end]
+    return None
 
 
 def check_skill(skill_dir: Path) -> list[str]:
@@ -111,6 +159,115 @@ def check_skill(skill_dir: Path) -> list[str]:
     return errors
 
 
+def check_persona_file(path: Path, seeds_dir: Path) -> list[str]:
+    """Validate one assets/personas/*.md pack. Exportable for tests."""
+    errors: list[str] = []
+    rel = path.name
+    text = path.read_text(encoding="utf-8")
+    titles = h2_titles(text)
+
+    for prefix in PERSONA_SECTION_PREFIXES:
+        if not has_section_prefix(titles, prefix):
+            errors.append(f"personas/{rel}: 缺少章节「{prefix}」")
+
+    if not any(m in text for m in PERSONA_CONFIRM_MARKERS):
+        errors.append(
+            f"personas/{rel}: 须含确认权红线表述"
+            f"（{' / '.join(PERSONA_CONFIRM_MARKERS)}）"
+        )
+
+    for banned in PERSONA_MECHANISM_FORBIDDEN:
+        if banned in text:
+            errors.append(
+                f"personas/{rel}: persona 不得写机制层补丁 → 发现「{banned}」"
+            )
+
+    for seed_name in DOMAIN_SEED_REF_RE.findall(text):
+        target = seeds_dir / seed_name
+        if not target.is_file():
+            errors.append(
+                f"personas/{rel}: 引用缺失 domain-seeds/{seed_name}"
+            )
+
+    for domain_name in DOMAINS_REF_RE.findall(text):
+        seed = seeds_dir / domain_name
+        if not seed.is_file():
+            errors.append(
+                f"personas/{rel}: 顾问团 domains/{domain_name} "
+                f"无对应 domain-seeds/{domain_name}"
+            )
+
+    return errors
+
+
+def check_domain_seed_file(path: Path) -> list[str]:
+    """Validate one assets/domain-seeds/*.md pack. Exportable for tests."""
+    errors: list[str] = []
+    rel = path.name
+    stem = path.stem
+    text = path.read_text(encoding="utf-8")
+    titles = h2_titles(text)
+
+    for section in DOMAIN_SEED_SECTIONS:
+        if not has_section_prefix(titles, section):
+            errors.append(f"domain-seeds/{rel}: 缺少章节「{section}」")
+
+    title_m = TITLE_RE.search(text)
+    if not title_m:
+        errors.append(f"domain-seeds/{rel}: 缺少「# 域档案：…」标题")
+    else:
+        title_name = title_m.group(1).strip()
+        if title_name != stem:
+            errors.append(
+                f"domain-seeds/{rel}: 标题「{title_name}」与文件名 stem「{stem}」不一致"
+            )
+
+    stance = section_body(text, "专家立场")
+    if stance is not None:
+        if "身份" not in stance:
+            errors.append(f"domain-seeds/{rel}: 专家立场须含「身份」")
+        if "判断偏好" not in stance:
+            errors.append(f"domain-seeds/{rel}: 专家立场须含「判断偏好」")
+
+    anchor = section_body(text, "时效性锚点")
+    if anchor is not None and not any(m in anchor for m in ROT_MARKERS):
+        errors.append(
+            f"domain-seeds/{rel}: 时效性锚点须标注腐烂/更新频率提示"
+        )
+
+    return errors
+
+
+def check_persona_and_domain_seeds(skill_dir: Path) -> list[str]:
+    """Schema + cross-refs for wiki-gardener persona / domain-seed assets."""
+    if skill_dir.name != "wiki-gardener":
+        return []
+
+    errors: list[str] = []
+    personas_dir = skill_dir / "assets" / "personas"
+    seeds_dir = skill_dir / "assets" / "domain-seeds"
+
+    if not personas_dir.is_dir():
+        return ["wiki-gardener: 缺少 assets/personas/"]
+    if not seeds_dir.is_dir():
+        return ["wiki-gardener: 缺少 assets/domain-seeds/"]
+
+    persona_files = sorted(personas_dir.glob("*.md"))
+    seed_files = sorted(seeds_dir.glob("*.md"))
+
+    if not persona_files:
+        errors.append("wiki-gardener: assets/personas/ 至少需要 1 个 persona")
+    if not seed_files:
+        errors.append("wiki-gardener: assets/domain-seeds/ 至少需要 1 个域种子")
+
+    for path in persona_files:
+        errors.extend(check_persona_file(path, seeds_dir))
+    for path in seed_files:
+        errors.extend(check_domain_seed_file(path))
+
+    return errors
+
+
 def check_dup_scan_import(root: Path) -> list[str]:
     script = root / "wiki-gardener" / "scripts" / "dup_scan.py"
     if not script.is_file():
@@ -143,6 +300,7 @@ def main() -> int:
             all_errors.append(f"缺少 skill 目录: {name}")
             continue
         all_errors.extend(check_skill(skill_dir))
+        all_errors.extend(check_persona_and_domain_seeds(skill_dir))
 
     all_errors.extend(check_dup_scan_import(root))
 

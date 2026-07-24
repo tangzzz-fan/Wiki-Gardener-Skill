@@ -10,7 +10,9 @@
    `wiki-gardener` / `domain-expert` 不得写死某一垂直领域（如仅 iOS / IoT）。领域知识只存在于用户 vault 的 `00_系统/domains/`。文档与示例可用虚构域说明流程，但须标明「示例」。
 3. **不擅自提交**  
    除非用户明确要求 commit / push，否则只改文件、不写 git 历史。
-4. **改 skill 后跑校验**  
+4. **禁止 Co-authored-by**  
+   提交说明不得添加 `Co-authored-by`（含 Cursor / Agent 等）。作者仅保留实际 git author；amend / 新建 commit 均适用。
+5. **改 skill 后跑校验**  
    `python3 scripts/validate_skills.py` 与 `python3 -m pytest -v` 须通过；涉及人话输出格式时同步改 `tests/EVAL.md`。
 
 ## 仓库地图
