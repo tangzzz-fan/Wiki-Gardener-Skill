@@ -42,3 +42,24 @@ def test_install_script_defaults_to_all_skills_and_setup():
     assert "--skill '*'" in script or '--skill "*"' in script
     assert "setup-knowledge-skills" in script
     assert "--no-setup" in script
+
+
+def test_existing_vault_onboarding_docs_and_wizard():
+    guide = ROOT / "docs" / "已有知识库接入.md"
+    assert guide.is_file()
+    guide_text = guide.read_text(encoding="utf-8")
+    assert "分批漏斗" in guide_text
+    assert "就地登记" in guide_text
+    assert "10_inbox" in guide_text
+
+    wizard = (
+        SKILLS / "wiki-gardener" / "references" / "setup-wizard.md"
+    ).read_text(encoding="utf-8")
+    assert "1.1 已有乱库接入" in wizard
+    assert "禁止" in wizard and "静默删除" in wizard
+
+    setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "已有知识库接入" in setup
+    assert "保留旧文件" in setup
