@@ -10,3 +10,8 @@ htmlcov/
 *.skill
 /tmp/
 build/
+
+# Companion: cover design local secrets (never commit)
+skills/gbro-cover-design/config.md
+skills/gbro-cover-design/assets/my-face.png
+skills/gbro-cover-design/assets/my-face.*

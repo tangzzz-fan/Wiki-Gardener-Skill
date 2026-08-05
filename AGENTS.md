@@ -23,16 +23,27 @@
 | `skills/setup-knowledge-skills/` | 安装后一次性引导 |
 | `skills/wiki-gardener/` | 知识库园丁（`docs/` 下放使用与调优指南） |
 | `skills/domain-expert/` | 领域专家（`docs/` 下放使用与调优指南） |
+| `skills/grill-me/` 等 | Companion：内容思考 / 对标拆解 / 呈现导出（可选工具，领域无关） |
 | `tests/fixtures/sample-vault/` | 评测用示例库（内含示例域，非产品限定） |
 | `tests/fixtures/interview-personas/` | 访谈风格人设 + 黄金宪章 |
 | `tests/EVAL.md` | L2 行为评测清单 |
 | `docs/自定义与调教指南.md` | 克隆后按个人经验改域档案 / 种子 / 流程 |
 | `docs/已有知识库接入.md` | 非空乱库如何初始化并处理旧文 |
+| `docs/companion协作流程.md` | Companion 唤起、交接与落盘（经验证） |
 | `scripts/` | `install_skills.sh`、校验、打包、禁 emoji、宪章风格评分 |
 
 用户安装 / 更新：见根目录 README。短命令 `./scripts/install_skills.sh`（内部 `npx skills add … --skill '*'` + 尝试拉起 setup）。Desktop 用 `pack_skills.sh`。
 
 新增 companion：在 `skills/<name>/` 新建包即可，勿放回仓库根目录。
+
+### Companion 边界（工具型，可选）
+
+| 类 | 包名 | 与核心的关系 |
+|---|---|---|
+| 内容思考 | `grill-me`、`topic-resonate`、`content-diagnose`、`script-flow`、`content-decomposer` | 想清楚 / 拆对标；产物默认可进 `10_inbox/`，不直写 `20_领域/` |
+| 内容呈现 | `frontend-slides`、`ian-xiaohei-illustrations`、`gbro-cover-design` | 从成稿导出演示/配图/封面；默认 `90_export/`（或用户指定路径），不进吸附主路径 |
+
+核心 trio 职责不变：园丁管结构、专家管单篇对错、setup 只管指路。Companion 不得把自媒体写死进核心 SKILL。
 
 ## 输出风格
 

@@ -1,0 +1,4 @@
+NOTICE
+改编自 dontbesilent dbskill 相关技能的理念与流程结构（dbs-script-flow 等），
+经同构重写以适配本知识库技能包：去 /dbs 路由、禁止 emoji、标记式改稿用文本标签。
+原项目品牌与完整工具箱未迁入本仓库。

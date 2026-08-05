@@ -1,0 +1,4 @@
+NOTICE
+本目录自本机 Agent Skills 迁入，用于与本知识库技能包组合使用。
+输出约定见 SKILL.md「Vault contract」：默认 90_export/，禁止写入 20_领域/。
+上游许可见同目录 LICENSE（若有）。

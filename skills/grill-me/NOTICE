@@ -1,0 +1,8 @@
+NOTICE
+追问技法（一次一问、走决策树分支、每问给出推荐答案、能从材料推断则先读再问）
+改编自 Matt Pocock 公开的 grill-me / grilling 原语思路：
+https://github.com/mattpocock/skills
+https://www.aihero.dev/my-grill-me-skill-has-gone-viral
+
+本包另加：中文交付、无 emoji、与 domain-expert / 10_inbox / 禁止 20_领域 的 vault 交接。
+本机通过 npx/桥接安装的 grill-me 常为指向 /grilling 的薄壳，不可原样覆盖本文件。

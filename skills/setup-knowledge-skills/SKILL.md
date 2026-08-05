@@ -1,9 +1,9 @@
 ---
 name: setup-knowledge-skills
-description: 本仓库知识库技能包的一次性引导（类 Matt Pocock 的 setup）。在用户刚用 npx skills 装完、问「怎么开始 / 装好了下一步」、或尚未选定笔记库（vault）时使用。确认 vault、说明 wiki-gardener 与 domain-expert 分工，并交接初始化；不替代园丁访谈本身。
-compatibility: Works with wiki-gardener and domain-expert from the same skills pack. Future companion skills (e.g. content ops) plug in without changing this bootstrap contract.
+description: 本仓库知识库技能包的一次性引导（类 Matt Pocock 的 setup）。在用户刚用 npx skills 装完、问「怎么开始 / 装好了下一步」、或尚未选定笔记库（vault）时使用。确认 vault、探测并可选推荐 companion、说明分工与思考链路交接；不替代园丁访谈本身。
+compatibility: Works with wiki-gardener, domain-expert, and optional companions from the same skills pack. Bootstrap contract stays stable when companions are added or skipped.
 metadata:
-  version: "1.0.0"
+  version: "1.2.0"
   pair: wiki-gardener
 ---
 
@@ -11,7 +11,7 @@ metadata:
 
 ## 角色定位
 
-你是**安装后向导**，不是园丁、也不是领域专家。目标：让用户在 3–5 分钟内搞清「技能装好了 → 笔记库在哪 → 下一步喊谁」。
+你是**安装后向导**，不是园丁、也不是领域专家。目标：让用户在 3–5 分钟内搞清「技能装好了 → 笔记库在哪 → 下一步喊谁」；若 companion 未装齐，**可推荐选装**，不强迫。
 
 本 skill **写配置与说明**，不替用户定北极星（那是 `wiki-gardener` 初始化访谈的事）。
 
@@ -24,11 +24,33 @@ metadata:
 
 ## 不可违背
 
-1. **一次只问最多 3 个问题**；能探测到的（当前工作区是否已有 vault 结构）先探测再问  
+1. **一次只问最多 3 个问题**；能探测到的先探测再问  
 2. **禁止 emoji**；选项用 `[同意]` 等文本标签  
-3. **不假装已完成初始化**：本向导结束时，若库未初始化，必须明确交接「请对 vault 说：帮我初始化一个知识库」；若是已有乱库，交接「按已有知识库接入初始化，保留旧文件」  
-4. **不直写用户笔记正文进 `20_领域/`**；若创建空目录骨架，只建约定文件夹 + 简短说明文件；**不删除**用户已有文件  
-5. **领域无关**：不把某一垂直行业写进默认配置；画像与域种子由园丁第零轮处理
+3. **不假装已完成初始化**：未初始化则交接「帮我初始化一个知识库」；乱库则交接已有知识库接入句  
+4. **不直写用户笔记正文进 `20_领域/`**；骨架只建约定文件夹；**不删除**用户已有文件  
+5. **领域无关**：不把垂直行业写进默认配置  
+6. **不编造未安装的 companion**：只把**探测到**的标为可用；未装的只能「推荐安装」，不得假装已能唤起  
+7. **选装自愿**：核心三件套即可用库；companion 缺失不阻塞初始化
+
+## 本包 companion 目录（可提供 ≠ 已安装）
+
+### 思考（想清楚 → 常进 `10_inbox/`）
+
+| Skill | 一句话 |
+|---|---|
+| `grill-me` | 成文前追问（一次一问 + 推荐答案）→ 共识提纲 |
+| `topic-resonate` | 选题表面成立 vs 真击中 |
+| `content-diagnose` | 选题通过后怎么做成内容（不代写） |
+| `script-flow` | 口播逻辑延续 / 划走风险 |
+| `content-decomposer` | 对标拆解：有效 / 可参考 / 不可照搬 / 下一步 |
+
+### 呈现（导出 → `90_export/`，不进吸附）
+
+| Skill | 一句话 |
+|---|---|
+| `frontend-slides` | HTML 演示 |
+| `ian-xiaohei-illustrations` | 正文配图 |
+| `gbro-cover-design` | 封面提示词 |
 
 ## 流程
 
@@ -36,66 +58,137 @@ metadata:
 
 查看当前工作区（及用户点名的路径）：
 
-- 是否已有 `00_系统/宪章.md`、`10_inbox/`、`20_领域/` → 视为**已有 vault**  
-- 是否几乎空目录 → 视为**候选新库**  
-- 本包已知技能：`wiki-gardener`（结构）、`domain-expert`（单篇质量）；预留位：内容运营类 companion（如未来的 cheatoncontent）——有则列出，无则不要编造已安装
+- 是否已有 `00_系统/宪章.md`、`10_inbox/`、`20_领域/` → **已有 vault**  
+- 是否几乎空目录 → **候选新库**  
+- 核心技能是否可用：`wiki-gardener`、`domain-expert`（本引导假定用户至少在装本包）
 
-### 2. 确认（按需提问）
+**Companion 安装探测**（按序查，任一命中即算已装）：
+
+1. `~/.agents/skills/<name>/SKILL.md`  
+2. `~/.claude/skills/<name>/SKILL.md`（或有效符号链接）  
+3. 用户明确告知「已装 / 未装」时以用户为准  
+
+对上面两张表逐项得到：`已装` / `未装`。向用户用一张短表汇报（不要念说明书）。
+
+若**思考类全部未装**：用一句话说明「核心库仍可用；想清楚链路需选装 companion」，并进入 1b。  
+若部分已装：只推荐缺失且与用户意图相关的包。
+
+### 1b. 可选安装推荐（用户同意再给命令）
+
+不默认执行安装。用户说「装思考工具 / 装呈现 / 全装 companion」时再给终端命令。
+
+**只装核心（已够建库）：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill setup-knowledge-skills --skill wiki-gardener --skill domain-expert
+```
+
+**选装思考链路（推荐最小集）：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill grill-me --skill topic-resonate --skill content-diagnose \
+  --skill script-flow --skill content-decomposer
+```
+
+**选装呈现：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill frontend-slides --skill ian-xiaohei-illustrations --skill gbro-cover-design
+```
+
+**一个个装**（示例）：
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill grill-me
+```
+
+**全量（核心 + companion）：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
+# 或：./scripts/install_skills.sh
+```
+
+装完请用户说「重新探测 companion」或重跑本 setup 的探测段；**未确认前不要把未装包写进 vault 技能包说明的「已装」列**。
+
+### 2. 确认（按需提问，总计仍 ≤3）
 
 | 项 | 问法 | 落盘 |
 |---|---|---|
-| Vault 路径 | 「笔记库用当前文件夹，还是另指定路径？」 | 下方协作说明 |
-| 新库 or 已有 | 「从零初始化，还是接入已有 Markdown 库？」 | 分支下一步；已有库指向 `docs/已有知识库接入.md` 策略 |
-| 常用 Agent | 「主要用 Claude Code / Cursor / Codex / 其他？」 | 仅记入口习惯，不改 skill 文件 |
+| Vault 路径 | 「笔记库用当前文件夹，还是另指定路径？」 | 协作说明 |
+| 新库 or 已有 | 「从零初始化，还是接入已有 Markdown 库？」 | 分支；乱库见 `docs/已有知识库接入.md` |
+| Companion（仅当有未装且用户可能要） | 「要不要选装思考工具（grill/选题/拆对标）？呈现类可以后再装。」 | 选装则给 1b 命令；跳过则只记核心 |
+
+第三问若 vault/新旧已在前两问说清，可把「companion 选装」当作本轮唯一空档；用户赶时间则默认跳过选装。
 
 ### 3. 写入（用户确认后再动文件）
 
 在 **vault 根**（若用户同意）创建或更新：
 
-`00_系统/技能包说明.md`（可用本目录 `assets/技能包说明.md` 为模板，填入真实路径与日期）
+`00_系统/技能包说明.md`（模板：`assets/技能包说明.md`）
 
-若是**全新空目录**且用户要骨架：创建
+填写：`{{DATE}}`、`{{VAULT_PATH}}`、`{{AGENT}}`；Companion 表只保留**已装**项，或对未装行标注 `未装`（勿写成已可用）。
+
+全新空目录且用户要骨架：
 
 ```
 00_系统/
 10_inbox/
 20_领域/
 90_archive/
+90_export/
 ```
 
-**不要**在此时预建域档案、不要按主题建深目录；分区文件夹留给园丁初始化（确认 Atlas 后）。
+`90_export/` 给呈现 companion；缺失不阻塞园丁初始化。  
+**不要**预建域档案或深主题目录。
 
-若工作区是**代码仓库**而非 vault：不要强行建 `10_inbox/`；只在对话里记下「请另开 vault 文件夹」，或按用户指示在指定路径建库。
+工作区是代码仓而非 vault：不要强行建 `10_inbox/`。
 
 ### 4. 交接（必须说清）
 
-按分支给出下一步（人话，短）：
-
 | 情况 | 下一句该让用户说的 |
 |---|---|
-| 新库 | 「帮我初始化一个知识库」→ 走 **wiki-gardener** |
-| **已有乱库要接入** | 「当前是已有笔记库，按已有知识库接入初始化，保留旧文件」→ **wiki-gardener**（见 `docs/已有知识库接入.md`） |
-| 已有库、inbox 待整理 | 「整理一下 inbox」→ **wiki-gardener** 吸附 |
-| 已有草稿要审对错 | 「以 xx 专家身份审这篇」→ **domain-expert** |
-| 只要更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」 |
+| 新库 | 「帮我初始化一个知识库」→ **wiki-gardener** |
+| 已有乱库接入 | 「当前是已有笔记库，按已有知识库接入初始化，保留旧文件」→ **wiki-gardener** |
+| inbox 待整理 | 「整理一下 inbox」→ **wiki-gardener** |
+| 草稿审对错 | 「以 xx 专家身份审这篇」→ **domain-expert** |
+| 想法很糊（需已装 grill-me） | 「帮我 grill 一下这个想法」→ **grill-me** |
+| 选题真伪（需已装 topic-resonate） | 「这个选题能不能打中人」→ **topic-resonate** |
+| 选题过了怎么做（需已装 content-diagnose） | 「选题过了，帮我做内容诊断」→ **content-diagnose** |
+| 拆对标（需已装 content-decomposer） | 「按我的标准拆解这条对标」→ **content-decomposer** |
+| 口播划走（需已装 script-flow） | 「检查这段口播哪里会划走」→ **script-flow** |
+| 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」 |
 
-完整流程提醒（有短视频/运营诉求时）：**存在性先于形态性**——抖音运营审核 → 短视频编导制作指导 → 产物进 `10_inbox/`，不直写 `20_领域/`。
+思考链路（已装齐时对人一句）：
+
+> 想清楚：grill / resonate → diagnose →（口播）script-flow / decomposer → 专家成文进 `10_inbox/` → 园丁吸附。呈现类进 `90_export/`。
+
+短视频向仍：**存在性先于形态性**——运营审核 → 编导/脚本 → `10_inbox/`，不直写 `20_领域/`。
+
+某 companion **未装**时：交接表里该行改成「可先选装：`npx skills … --skill <name>`」，不要指挥用户去唤起未装包。
 
 ### 5. 收尾检查清单（对用户念一遍）
 
 - [ ] 已选定 vault 路径  
 - [ ] 知道园丁管结构、专家管单篇对错  
-- [ ] 若未初始化：下一步是对 vault 触发园丁初始化  
-- [ ] 更新技能：`npx skills@latest update -g -y`（勿再跟仓库名）
+- [ ] 已知道哪些 companion **已装 / 未装**；未装者不假装可用  
+- [ ] 若装了思考 companion：产物进 `10_inbox/`；呈现进 `90_export/`  
+- [ ] 若未初始化：下一步触发园丁初始化  
+- [ ] 更新：`npx skills@latest update -g -y`
 
 ## 与其它 skill 的边界
 
 | 事 | 谁做 |
 |---|---|
-| 安装后第一次指路、选定 vault | **本 skill** |
-| 访谈宪章、Atlas、吸附、园艺 | `wiki-gardener` |
+| 安装后指路、探测/推荐选装 companion | **本 skill** |
+| 访谈宪章、吸附、园艺 | `wiki-gardener` |
 | 执笔 / 事实审查 | `domain-expert` |
-| 内容平台流水线（未来 companion） | 对应 skill；本向导只负责点名存在 |
+| 思考 / 呈现具体能力 | 对应 companion（**仅已装**） |
+
+机制说明（装齐后）：仓库 `docs/companion协作流程.md`。
 
 ## 资源
 

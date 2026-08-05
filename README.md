@@ -10,9 +10,10 @@
 | **setup-knowledge-skills** | 装完后的一次性引导（选 vault、指路） | 定北极星、写正文 |
 | **wiki-gardener**（园丁） | 建库、收纳、去重、体检 | 单篇事实对不对、帮你改文笔 |
 | **domain-expert**（领域专家） | 按你指定的领域审稿 / 执笔 | 该不该收进库、放哪一格 |
+| **Companion**（可选） | 内容思考（选题/拆解/脚本）与呈现导出（演示/配图/封面） | 替代园丁吸附或专家审稿 |
 
-协作习惯：**先审对不对，再决定收不收。**  
-更细的用法：[园丁说明](./skills/wiki-gardener/docs/使用说明与调优指南.md) · [专家说明](./skills/domain-expert/docs/使用说明与调优指南.md)  
+协作习惯：**先审对不对，再决定收不收。** 呈现类默认落到 vault 的 `90_export/`，不直写 `20_领域/`。  
+更细的用法：[园丁说明](./skills/wiki-gardener/docs/使用说明与调优指南.md) · [专家说明](./skills/domain-expert/docs/使用说明与调优指南.md) · [skills 目录说明](./skills/README.md) · [Companion 协作流程](./docs/companion协作流程.md)  
 **已有乱库怎么接入**：[已有知识库接入](./docs/已有知识库接入.md)  
 **克隆后按自己经验改**：[自定义与调教指南](./docs/自定义与调教指南.md)
 
@@ -62,7 +63,15 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill \
   -g -y
 ```
 
-以后在 `skills/` 下新增 companion（如内容运营类）后，**同一条** `install_skills.sh` / `add … -g -y`（全量）即可带上新包，不必改用户肌肉记忆。
+只要思考 companion（示例）：
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill grill-me --skill topic-resonate --skill content-diagnose \
+  --skill script-flow --skill content-decomposer
+```
+
+setup 引导会**探测本机已装哪些 companion**，未装的可推荐上述选装命令，不强迫。全量装齐后，**同一条** `install_skills.sh` / `add … --skill '*'` 即可。
 
 ---
 
@@ -101,10 +110,10 @@ cd Wiki-Gardener-Skill
 ```bash
 git clone https://github.com/tangzzz-fan/Wiki-Gardener-Skill.git
 cd Wiki-Gardener-Skill
-cp -R skills/wiki-gardener skills/domain-expert skills/setup-knowledge-skills ~/.claude/skills/
+cp -R skills/* ~/.claude/skills/
 ```
 
-手拷没有 `skills update`；要更新请改走 `npx skills add`，或 `git pull` 后重拷。
+手拷没有 `skills update`；要更新请改走 `npx skills add`，或 `git pull` 后重拷。全量拷会带上 companion；若只要核心三件套，可只拷 `wiki-gardener`、`domain-expert`、`setup-knowledge-skills`。
 
 ---
 

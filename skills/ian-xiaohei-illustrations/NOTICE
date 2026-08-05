@@ -1,0 +1,4 @@
+NOTICE
+本目录自本机 Agent Skills 迁入（Ian 小黑配图）。
+本分发包为控制体积未附带 assets/examples/；风格以 references/ 为准。
+输出默认 90_export/，禁止写入 20_领域/。
