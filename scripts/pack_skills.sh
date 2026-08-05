@@ -14,7 +14,7 @@ pack() {
     echo "skip: missing ${src}" >&2
     return 0
   fi
-  echo "→ 打包 ${src}/ → ${out}"
+  echo "→ packing ${src}/ → ${out}"
   rm -f "$out"
   # zip 内顶层目录名为 skill 名（Desktop / 部分导入器期望）
   (
@@ -25,15 +25,29 @@ pack() {
       -x "**/*.pyc" \
       >/dev/null
   )
-  unzip -l "$out" | tail -n +1 | head -n 20
+  # 勿用 head：pipefail 下大包 listing 会被 SIGPIPE(141) 弄挂（Linux CI）。
+  # sed 会读完 stdin，只打印前 20 行。
+  unzip -l "$out" | sed -n '1,20p'
   echo
 }
 
-# 发现 skills/*/SKILL.md
-while IFS= read -r -d '' skill_md; do
-  name="$(basename "$(dirname "$skill_md")")"
-  pack "$name"
-done < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -print0 | sort -z)
+pack_all() {
+  while IFS= read -r -d '' skill_md; do
+    name="$(basename "$(dirname "$skill_md")")"
+    pack "$name"
+  done < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -print0 | sort -z)
+}
+
+# 用法：
+#   ./scripts/pack_skills.sh              # 打包 skills/* 全部
+#   ./scripts/pack_skills.sh wiki-gardener domain-expert setup-knowledge-skills
+if [[ $# -gt 0 ]]; then
+  for name in "$@"; do
+    pack "$name"
+  done
+else
+  pack_all
+fi
 
 echo "OK: pack complete"
 ls -lh ./*.skill 2>/dev/null || true

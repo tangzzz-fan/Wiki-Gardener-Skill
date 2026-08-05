@@ -38,7 +38,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq zip unzip
-          bash scripts/pack_skills.sh
+          # 全量 companion 包很大；烟测只打核心三件，校验脚本与产物即可
+          bash scripts/pack_skills.sh wiki-gardener domain-expert setup-knowledge-skills
           test -f wiki-gardener.skill
           test -f domain-expert.skill
           test -f setup-knowledge-skills.skill
