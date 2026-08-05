@@ -3,7 +3,7 @@
 > 本文说明本仓库 **companion 如何被唤起、如何交接、产物落哪**。  
 > 契约由 `tests/test_companion_pipeline.py` + `tests/EVAL.md` §C3 锁定；改流程须先改测试再改文档。
 
-相关：核心分工见根 [README.md](../README.md)；自定义见 [自定义与调教指南.md](./自定义与调教指南.md)；行为评测见 [tests/EVAL.md](../tests/EVAL.md)。
+相关：核心分工见根 [README.md](../README.md)；**已装用户更新与提示**见 [更新说明.md](./更新说明.md)；自定义见 [自定义与调教指南.md](./自定义与调教指南.md)；行为评测见 [tests/EVAL.md](../tests/EVAL.md)。
 
 ---
 
@@ -38,7 +38,8 @@ setup 会探测 `~/.agents/skills` / `~/.claude/skills`：**未装则推荐命�
 |---|---|---|
 | 「刚装完，带我开始」 | setup | setup 列出 companion |
 | 「想法很糊 / 帮我 grill」 | `grill-me` | setup 交接句 + grill description |
-| 「一句话选题，写进库」 | 可先 grill，再 `domain-expert` | 园丁零散思路交接 |
+| 「一句话选题，写进库」 | 可先 grill，再 `domain-expert` | 园丁零散思路交接（须甩可复制「帮我 grill」句） |
+| 「刚 update / 刷新技能包说明」 | setup | 念「更新提示」+ 重写 vault 技能包说明 |
 | 「这个选题能不能打中人」 | `topic-resonate` | description 触发语 |
 | 「选题过了，内容怎么做」 | `content-diagnose` | resonate→diagnose 交接 |
 | 「稿子哪里会划走」 | `script-flow` | description + 存在性提醒 |

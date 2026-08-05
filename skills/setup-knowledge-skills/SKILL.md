@@ -3,7 +3,7 @@ name: setup-knowledge-skills
 description: 本仓库知识库技能包的一次性引导（类 Matt Pocock 的 setup）。在用户刚用 npx skills 装完、问「怎么开始 / 装好了下一步」、或尚未选定笔记库（vault）时使用。确认 vault、探测并可选推荐 companion、说明分工与思考链路交接；不替代园丁访谈本身。
 compatibility: Works with wiki-gardener, domain-expert, and optional companions from the same skills pack. Bootstrap contract stays stable when companions are added or skipped.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   pair: wiki-gardener
 ---
 
@@ -19,8 +19,9 @@ metadata:
 
 - 用户说：刚装完 / 怎么开始 / setup / 引导一下  
 - 安装脚本提示「请运行 setup-knowledge-skills」之后  
-- 用户有空文件夹，但还没建过 `00_系统/宪章.md`
-- 用户说已有笔记库很乱、想接入本 skill（非空目录）
+- 用户有空文件夹，但还没建过 `00_系统/宪章.md`  
+- 用户说已有笔记库很乱、想接入本 skill（非空目录）  
+- 用户说：**刚 update / 更新了技能 / 刷新技能包说明**（更新后引导，重点念「更新提示」）
 
 ## 不可违背
 
@@ -69,6 +70,10 @@ metadata:
 3. 用户明确告知「已装 / 未装」时以用户为准  
 
 对上面两张表逐项得到：`已装` / `未装`。向用户用一张短表汇报（不要念说明书）。
+
+**若用户是更新后来的**：先念一句「更新提示」——
+
+> 选题还糊时，可以说「帮我 grill 一下这个想法」用 `grill-me` 收成共识提纲，再找领域专家成文。其它 companion 见技能包说明里的「更新提示」「选题创作怎么用」。
 
 若**思考类全部未装**：用一句话说明「核心库仍可用；想清楚链路需选装 companion」，并进入 1b。  
 若部分已装：只推荐缺失且与用户意图相关的包。
@@ -160,7 +165,8 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 选题过了怎么做（需已装 content-diagnose） | 「选题过了，帮我做内容诊断」→ **content-diagnose** |
 | 拆对标（需已装 content-decomposer） | 「按我的标准拆解这条对标」→ **content-decomposer** |
 | 口播划走（需已装 script-flow） | 「检查这段口播哪里会划走」→ **script-flow** |
-| 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」 |
+| 刚 update，要刷新说明 | 本 skill：探测 companion + 重写 `技能包说明.md` 的「更新提示」节 |
+| 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」，然后再跑本 setup |
 
 思考链路（已装齐时对人一句）：
 

@@ -33,6 +33,16 @@ cp -R tests/fixtures/sample-vault /tmp/wiki-eval-vault
 - [ ] 新库时交接「帮我初始化一个知识库」（wiki-gardener），不跳过访谈直接写满宪章
 - [ ] 无人话 emoji
 
+### A0-U. 更新后刷新（已装用户）
+
+**准备**：vault 已有 `00_系统/`；本机刚 `npx skills update`  
+**触发**：「我刚更新了知识库技能，刷新一下技能包说明」或「运行 setup-knowledge-skills」  
+**必须**：
+- [ ] 口头念选题糊时可用 grill 的「更新提示」（或等价一句）
+- [ ] 写入/更新 vault `00_系统/技能包说明.md`，含「更新提示」「选题创作怎么用」
+- [ ] 探测表标出 companion 已装/未装；未装不假装可唤起
+- [ ] 无人话 emoji
+
 ### A1-E. 已有乱库接入（非空）
 
 **准备**：非空目录（若干杂乱 `.md`），无 `00_系统/宪章.md`  
@@ -267,6 +277,7 @@ python3 scripts/score_constitution.py \
 ### C3. Companion 协作（思考 → 入库 → 呈现）
 
 > 机制说明（唤起 / 落盘 / 故障对照）：[docs/companion协作流程.md](../docs/companion协作流程.md)。  
+> 已装用户如何看见新 companion：[docs/更新说明.md](../docs/更新说明.md)。  
 > 自动化锁点：`tests/test_companion_pipeline.py`。
 
 **准备**：同包已安装 companion（至少 `grill-me`、`content-decomposer`；呈现类任选其一）

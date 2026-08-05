@@ -108,6 +108,8 @@ def test_setup_lists_companions_and_evoke_handoffs():
     assert "这个选题能不能打中人" in setup
     assert "按我的标准拆解这条对标" in setup
     assert ".agents/skills" in setup
+    assert "更新提示" in setup
+    assert "刷新技能包说明" in setup or "update" in setup.lower()
 
     pack = (
         SKILLS / "setup-knowledge-skills" / "assets" / "技能包说明.md"
@@ -118,6 +120,10 @@ def test_setup_lists_companions_and_evoke_handoffs():
     assert "{{STATUS_grill-me}}" in pack
     assert "未装" in pack
     assert "--skill grill-me" in pack or "选装" in pack
+    assert "## 更新提示" in pack
+    assert "## 选题创作怎么用" in pack
+    assert "帮我 grill 一下" in pack
+    assert "刷新一下技能包说明" in pack
 
 
 def test_gardener_routes_sparse_idea_and_benchmark_to_companions():
@@ -126,6 +132,7 @@ def test_gardener_routes_sparse_idea_and_benchmark_to_companions():
     assert "交接：零散思路" in gardener
     assert "grill-me" in gardener
     assert "domain-expert" in gardener
+    assert "帮我 grill 一下" in gardener
     assert "交接：对标材料" in gardener or "content-decomposer" in gardener
     assert "content-decomposer" in gardener
     assert "90_export" in gardener
@@ -139,6 +146,7 @@ def test_expert_writing_dedupes_grill_and_offers_export():
     ).read_text(encoding="utf-8")
     assert "grill-me" in writing
     assert "跳过重复追问" in writing or "少重复追问" in writing
+    assert "帮我 grill 一下" in writing
     assert "90_export" in writing
     assert "frontend-slides" in writing or "呈现 companion" in writing
 
@@ -149,6 +157,7 @@ def test_thinking_handoff_chain():
     assert "content-diagnose" in resonate
     assert "domain-expert" in resonate
     assert "grill-me" in resonate
+    assert "帮我 grill 一下" in resonate
 
     diagnose = (SKILLS / "content-diagnose" / "SKILL.md").read_text(
         encoding="utf-8"
@@ -156,6 +165,7 @@ def test_thinking_handoff_chain():
     assert "topic-resonate" in diagnose or "grill-me" in diagnose
     assert "domain-expert" in diagnose
     assert "script-flow" in diagnose
+    assert "帮我 grill 一下" in diagnose
 
     grill = (SKILLS / "grill-me" / "SKILL.md").read_text(encoding="utf-8")
     assert "不成文" in grill or "不写正文" in grill
@@ -224,6 +234,14 @@ def test_eval_and_flow_doc_cover_companion_evoke():
     assert "10_inbox" in flow_text
     assert "90_export" in flow_text
     assert "存在性先于形态性" in flow_text
+    assert "更新说明" in flow_text
+
+    update_doc = ROOT / "docs" / "更新说明.md"
+    assert update_doc.is_file()
+    update_text = update_doc.read_text(encoding="utf-8")
+    assert "npx skills@latest update" in update_text
+    assert "setup-knowledge-skills" in update_text
+    assert "帮我 grill 一下" in update_text
 
 
 def test_no_emoji_in_companion_skill_md():

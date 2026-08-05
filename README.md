@@ -53,7 +53,17 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 npx skills@latest update -g -y
 ```
 
-不要写仓库名。Vault 里的笔记 / 宪章 **不会**被覆盖。
+不要写仓库名。Vault 里的笔记 / 宪章 **不会**被覆盖；但 `00_系统/技能包说明.md` **也不会自动刷新**。
+
+更新后请在 Agent 说：
+
+```text
+运行 setup-knowledge-skills
+```
+
+或「我刚更新了知识库技能，刷新一下技能包说明」——才会把 **companion / grill-me 选题提示** 写进你的 vault。
+
+详见：[更新说明（已装用户）](./docs/更新说明.md) · [Companion 协作流程](./docs/companion协作流程.md)
 
 ### 只装某几个（可选）
 
