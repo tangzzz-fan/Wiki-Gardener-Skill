@@ -33,27 +33,15 @@ metadata:
 6. **不编造未安装的 companion**：只把**探测到**的标为可用；未装的只能「推荐安装」，不得假装已能唤起  
 7. **选装自愿**：核心三件套即可用库；companion 缺失不阻塞初始化
 
-## 本包 companion 目录（可提供 ≠ 已安装）
+## Companion 目录
 
-### 思考（想清楚 → 常进 `10_inbox/`）
+先读 `assets/companion-catalog.json`。它是本 setup 的 companion 清单真源，记录类别、触发语、默认落点和可选配置。按 catalog 生成短表，不在本文件维护第二份清单。
 
-| Skill | 一句话 |
-|---|---|
-| `grill-me` | 成文前追问（一次一问 + 推荐答案）→ 共识提纲 |
-| `topic-resonate` | 选题表面成立 vs 真击中 |
-| `content-diagnose` | 选题通过后怎么做成内容（不代写） |
-| `script-flow` | 口播逻辑延续 / 划走风险 |
-| `content-decomposer` | 对标拆解：有效 / 可参考 / 不可照搬 / 下一步 |
+- `thinking`：想清楚，产物默认可进 `10_inbox/`
+- `revision`：按审查报告修订，仍留在 `10_inbox/` 并交回复审
+- `presenting`：导出到 `90_export/`，不进吸附
 
-### 呈现（导出 → `90_export/`，不进吸附）
-
-| Skill | 一句话 |
-|---|---|
-| `frontend-slides` | HTML 演示 |
-| `ian-xiaohei-illustrations` | 正文配图（本机有 `mcp-image` 时可直出） |
-| `gbro-cover-design` | 封面提示词（本机有 `mcp-image` 时可选直出） |
-
-呈现类不依赖 MCP 也能用（提示词 / shot list 回退）。本机若已配置 Cursor MCP 生图/识图，可点名「用 mcp-image 生图」「用 luma 识图」；说明见仓库 `docs/MCP-图像能力.md`。**勿把密钥写进 vault 或本仓库。**
+呈现类不依赖 MCP 也能用（提示词 / shot list 回退）。本机若已配置 Cursor MCP 生图/识图，可点名「用 mcp-image 生图」「用 luma-vision 识图」；说明见仓库 `docs/MCP-图像能力.md`。**勿把密钥写进 vault 或本仓库。**
 
 ## 流程
 
@@ -65,13 +53,16 @@ metadata:
 - 是否几乎空目录 → **候选新库**  
 - 核心技能是否可用：`wiki-gardener`、`domain-expert`（本引导假定用户至少在装本包）
 
-**Companion 安装探测**（按序查，任一命中即算已装）：
+**Companion 安装探测**（对 catalog 每项按序查，任一命中即算已装）：
 
 1. `~/.agents/skills/<name>/SKILL.md`  
 2. `~/.claude/skills/<name>/SKILL.md`（或有效符号链接）  
-3. 用户明确告知「已装 / 未装」时以用户为准  
+3. `~/.codex/skills/<name>/SKILL.md`
+4. `~/.cursor/skills/<name>/SKILL.md`
+5. 当前工作区 `.cursor/skills/<name>/SKILL.md`
+6. 用户明确告知「已装 / 未装」时以用户为准
 
-对上面两张表逐项得到：`已装` / `未装`。向用户用一张短表汇报（不要念说明书）。
+逐项得到：`已装` / `未装`。向用户用一张短表汇报（不要念说明书）。
 
 **若用户是更新后来的**：先念一句「更新提示」——
 
@@ -97,6 +88,12 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
 npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
   --skill grill-me --skill topic-resonate --skill content-diagnose \
   --skill script-flow --skill content-decomposer
+```
+
+**选装修订闭环：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill review-reviser
 ```
 
 **选装呈现：**
@@ -159,7 +156,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 情况 | 下一句该让用户说的 |
 |---|---|
 | 新库 | 「帮我初始化一个知识库」→ **wiki-gardener** |
-| 已有乱库接入 | 「当前是已有笔记库，按已有知识库接入初始化，保留旧文件」→ **wiki-gardener** |
+| 已有乱库接入 | 「当前文件夹是我已有的笔记库（非空）。请按 wiki-gardener『已有知识库接入』初始化：保留旧文件，先建系统骨架与宪章；旧文稍后分批放进 inbox。」→ **wiki-gardener** |
 | inbox 待整理 | 「整理一下 inbox」→ **wiki-gardener** |
 | 草稿审对错 | 「以 xx 专家身份审这篇」→ **domain-expert** |
 | 想法很糊（需已装 grill-me） | 「帮我 grill 一下这个想法」→ **grill-me** |
@@ -167,6 +164,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 选题过了怎么做（需已装 content-diagnose） | 「选题过了，帮我做内容诊断」→ **content-diagnose** |
 | 拆对标（需已装 content-decomposer） | 「按我的标准拆解这条对标」→ **content-decomposer** |
 | 口播划走（需已装 script-flow） | 「检查这段口播哪里会划走」→ **script-flow** |
+| 审查报告要求修订（需已装 review-reviser） | 「按审查报告修订这篇草稿」→ **review-reviser**；high 项修后交专家复审 |
 | 刚 update，要刷新说明 | 本 skill：探测 companion + 重写 `技能包说明.md` 的「更新提示」节 |
 | 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」，然后再跑本 setup |
 
@@ -174,7 +172,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 
 > 想清楚：grill / resonate → diagnose →（口播）script-flow / decomposer → 专家成文进 `10_inbox/` → 园丁吸附。呈现类进 `90_export/`。
 
-短视频向仍：**存在性先于形态性**——运营审核 → 编导/脚本 → `10_inbox/`，不直写 `20_领域/`。
+仅当用户明确在做短视频，或 vault 存在对应运营 / 编导域档案时，再提醒：**存在性先于形态性**——运营审核 → 编导/脚本 → `10_inbox/`，不直写 `20_领域/`。其他用户不播报这条垂直流程。
 
 某 companion **未装**时：交接表里该行改成「可先选装：`npx skills … --skill <name>`」，不要指挥用户去唤起未装包。
 
@@ -183,7 +181,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 - [ ] 已选定 vault 路径  
 - [ ] 知道园丁管结构、专家管单篇对错  
 - [ ] 已知道哪些 companion **已装 / 未装**；未装者不假装可用  
-- [ ] 若装了思考 companion：产物进 `10_inbox/`；呈现进 `90_export/`  
+- [ ] 思考 / 修订产物留在 `10_inbox/`；呈现进 `90_export/`
 - [ ] （可选）本机 Cursor MCP：`mcp-image` 生图 / `luma-vision` 识图已连上则呈现 companion 可直出或质检；未配置则只用提示词回退  
 - [ ] 若未初始化：下一步触发园丁初始化  
 - [ ] 更新：`npx skills@latest update -g -y`
@@ -195,10 +193,11 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 安装后指路、探测/推荐选装 companion | **本 skill** |
 | 访谈宪章、吸附、园艺 | `wiki-gardener` |
 | 执笔 / 事实审查 | `domain-expert` |
-| 思考 / 呈现具体能力 | 对应 companion（**仅已装**） |
+| 思考 / 修订 / 呈现具体能力 | 对应 companion（**仅已装**） |
 
 机制说明（装齐后）：仓库 `docs/companion协作流程.md`。
 
 ## 资源
 
 - `assets/技能包说明.md` —— 写入 vault 的说明模板
+- `assets/companion-catalog.json` —— companion 清单、触发语、默认落点与可选配置真源

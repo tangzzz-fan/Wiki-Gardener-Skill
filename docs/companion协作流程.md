@@ -19,12 +19,13 @@
 | 思考 companion | `content-diagnose` | 选题通过后怎么做成内容 | 代写全文 |
 | 思考 companion | `script-flow` | 口播逻辑延续 | 运营「该不该发」 |
 | 思考 companion | `content-decomposer` | 对标拆解（有效/可参考/不可照搬/下一步） | 升格为领域定论 |
+| 修订 companion | `review-reviser` | 按专家审查报告逐条修订草稿 | 自行判定通过、吸附 |
 | 呈现 companion | `frontend-slides` | HTML 演示 | 吸附 |
 | 呈现 companion | `ian-xiaohei-illustrations` | 正文配图 | 吸附 |
 | 呈现 companion | `gbro-cover-design` | 封面提示词（可选 MCP 直出） | 吸附 |
 
 **唤起前提**：全量安装（`./scripts/install_skills.sh` 或 `--skill '*'`）会带上全部 companion。也可**选装**：只装核心，或按需 `--skill grill-me` 等。  
-setup 会探测 `~/.agents/skills` / `~/.claude/skills`：**未装则推荐命令，不假装已可唤起**。详见 setup skill 的「1b. 可选安装推荐」。
+setup 会按 `assets/companion-catalog.json` 探测 `~/.agents/skills`、`~/.claude/skills`、`~/.codex/skills`、`~/.cursor/skills` 与工作区 `.cursor/skills`：**未装则推荐命令，不假装已可唤起**。详见 setup skill 的「1b. 可选安装推荐」。
 
 ---
 
@@ -44,7 +45,8 @@ setup 会探测 `~/.agents/skills` / `~/.claude/skills`：**未装则推荐命�
 | 「选题过了，内容怎么做」 | `content-diagnose` | resonate→diagnose 交接 |
 | 「稿子哪里会划走」 | `script-flow` | description + 存在性提醒 |
 | 「按我的标准拆这条对标」 | `content-decomposer` | 园丁对标交接 |
-| 「做成 HTML 演示 / 配图 / 封面」 | 对应呈现包 | description + `90_export` |
+| 「按审查报告修订这篇」 | `review-reviser` | finding 处理账本 + high 项复审 |
+| 「做成 HTML 演示 / PPT 转换 / PDF 导出 / 配图 / 封面」 | 对应呈现包 | description + `90_export` |
 
 ---
 
@@ -52,7 +54,7 @@ setup 会探测 `~/.agents/skills` / `~/.claude/skills`：**未装则推荐命�
 
 ```text
 想清楚（思考 companion）
-    → 成文 / 审查（domain-expert）→ 10_inbox/
+    → 成文 / 审查（domain-expert）→ 按需修订（review-reviser）→ 10_inbox/
     → 吸附（wiki-gardener）→ 20_领域/
     → 对外呈现（呈现 companion）→ 90_export/
 ```
@@ -64,6 +66,9 @@ flowchart LR
   think --> expert[domain-expert]
   expert --> inboxB[10_inbox]
   inboxB --> review[专家审查]
+  review --> revise[review-reviser]
+  revise -->|"high finding"| review
+  revise --> inboxB
   review --> gardener[wiki-gardener 吸附]
   gardener --> domain[20_领域]
   domain --> present[呈现 companion]
@@ -79,12 +84,19 @@ flowchart LR
 | 对标材料 | `content-decomposer` →（可选）grill / 专家 → 吸附 | 拆解笔记标研读草稿，先审再挂 |
 | 已有口播稿 | `script-flow`（问过后才改稿） | 改稿 → inbox；**不**等于运营放行 |
 
-短视频向仍遵守 **存在性先于形态性**（运营审核 → 编导/脚本 → inbox）。`script-flow` / `content-diagnose` 插在审核前后辅助，**不能跳过审核冒充可拍**。
+当用户明确在做短视频，或 vault 已有运营 / 编导域档案时，才启用 **存在性先于形态性**（运营审核 → 编导/脚本 → inbox）。`script-flow` / `content-diagnose` 插在审核前后辅助，**不能跳过审核冒充可拍**。
 
-### 3.2 呈现支路（细则）
+### 3.2 修订支路（细则）
+
+- 输入：`domain-expert` 的结构化审查报告 + 对应草稿。
+- `review-reviser` 先列 finding → 修改位置 → 验收方式，用户批准后才改文件。
+- 输出仍是 `10_inbox/` 草稿，并附 finding 处理账本。
+- 有 high finding 时必须回 `domain-expert` 复审；修订 skill 不得自行改成 `seedling` 或宣称通过。
+
+### 3.3 呈现支路（细则）
 
 - 输入：已成稿笔记或 `10_inbox/` 草稿均可。  
-- 输出：**仅** `90_export/`（或用户指定路径）。  
+- 输出：**仅** `90_export/`（或用户指定路径）。`frontend-slides` 还支持 PPT/PPTX 转 HTML、PDF 导出和用户确认后的在线部署。
 - **禁止**写入 `20_领域/`；误进 inbox 时园丁应提示挪到导出目录，不当作吸附成功。  
 - **可选 MCP（宿主级）**：本机接好 `mcp-image` / `luma-vision` 时，`ian-xiaohei` 可直出配图、`gbro-cover` 在出提示词后可选直出封面；未配置则提示词 / shot list 回退。说明见 [MCP-图像能力.md](./MCP-图像能力.md)。核心 skill **不**硬绑 MCP。
 
@@ -95,6 +107,7 @@ flowchart LR
 | 产物类型 | 路径 | frontmatter 习惯 |
 |---|---|---|
 | 提纲 / 诊断单 / 拆解 / 脚本改稿 / 专家正文 | `10_inbox/` | `origin: chat` 或 `reference`；`status: draft` |
+| 按审查报告修订后的草稿 + finding 处理账本 | `10_inbox/` | 保持 `status: draft`，复审通过后再由用户确认状态 |
 | 已吸附笔记 | `20_领域/` | 仅园丁吸附后写入 |
 | HTML / 配图 / 封面提示词（及可选 MCP 成品图） | `90_export/` | 不进吸附主路径 |
 | 拒收供体 | `90_archive/` | 园丁归档 |
@@ -122,6 +135,7 @@ python3 -m pytest -v tests/test_companion_pipeline.py tests/test_skills_layout.p
 - C3-c 呈现类拒绝进 `20_领域/`  
 - C3-d 脚本检查不绕过存在性  
 - C3-e 呈现 MCP 软接线（有则直出、无则提示词回退）  
+- C3-f 审查 → 修订 → high 项复审 → 吸附
 
 建议：全量安装后新开会话，对复制出的 fixture vault 逐条跑。
 
@@ -141,6 +155,6 @@ python3 -m pytest -v tests/test_companion_pipeline.py tests/test_skills_layout.p
 
 ## 7. 维护约定
 
-- 新增 companion：放 `skills/<name>/`，补 `description` 触发语，扩展 `tests/test_companion_pipeline.py` 的 `INVOKE_PHRASES` / 清单，更新本文与 setup 技能包说明。  
+- 新增 companion：放 `skills/<name>/`，在 setup 的 `assets/companion-catalog.json` 登记类别、触发语和默认落点，再更新本文与技能包说明。测试从 catalog 派生清单。
 - 不把垂直行业写死进 companion 正文；平台细节留在 vault `domains/` 与 domain-seeds。  
 - 禁止 emoji；改编来源保留各包 `NOTICE`。

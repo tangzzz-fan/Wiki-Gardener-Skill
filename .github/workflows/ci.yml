@@ -34,15 +34,21 @@ jobs:
       - name: Unit tests (L1)
         run: python -m pytest -v
 
+      - name: Golden constitution scores
+        run: python scripts/score_constitution.py --all-goldens
+
       - name: Pack skills smoke
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq zip unzip
-          # 全量 companion 包很大；烟测只打核心三件，校验脚本与产物即可
-          bash scripts/pack_skills.sh wiki-gardener domain-expert setup-knowledge-skills
+          # 覆盖核心、思考、修订、呈现四类；其余由结构校验发现
+          bash scripts/pack_skills.sh wiki-gardener domain-expert setup-knowledge-skills grill-me review-reviser frontend-slides
           test -f wiki-gardener.skill
           test -f domain-expert.skill
           test -f setup-knowledge-skills.skill
+          test -f grill-me.skill
+          test -f review-reviser.skill
+          test -f frontend-slides.skill
 
       - name: L2 EVAL reminder
         if: github.event_name == 'workflow_dispatch' && inputs.eval_reminder

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "companions": [
+    {
+      "name": "grill-me",
+      "category": "thinking",
+      "summary": "成文前一次一问，把模糊想法收成共识提纲",
+      "invoke_phrases": ["grill", "想法很糊", "观点梳清楚", "grill me"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "topic-resonate",
+      "category": "thinking",
+      "summary": "判断选题是表面成立还是真能引起共鸣",
+      "invoke_phrases": ["打中人", "共鸣"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "content-diagnose",
+      "category": "thinking",
+      "summary": "选题通过后诊断内容怎么做，不代写全文",
+      "invoke_phrases": ["内容怎么做", "内容诊断"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "script-flow",
+      "category": "thinking",
+      "summary": "检查口播逻辑延续与观众划走风险",
+      "invoke_phrases": ["逻辑延续", "划走", "口播"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "content-decomposer",
+      "category": "thinking",
+      "summary": "按用户标准拆解对标材料",
+      "invoke_phrases": ["拆解", "对标"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "review-reviser",
+      "category": "revision",
+      "summary": "按专家审查报告逐条修订草稿并交回复审",
+      "invoke_phrases": ["按审查报告修订", "逐条应用", "修订草稿"],
+      "default_sink": "10_inbox"
+    },
+    {
+      "name": "frontend-slides",
+      "category": "presenting",
+      "summary": "新建或转换 HTML 演示，并可导出 PDF 或在线分享",
+      "invoke_phrases": ["presentation", "slides", "演示", "PPT 转换", "PDF 导出"],
+      "default_sink": "90_export"
+    },
+    {
+      "name": "ian-xiaohei-illustrations",
+      "category": "presenting",
+      "summary": "生成正文配图方案，可选 MCP 直出",
+      "invoke_phrases": ["配图", "小黑"],
+      "default_sink": "90_export",
+      "optional_config": "mcp-image"
+    },
+    {
+      "name": "gbro-cover-design",
+      "category": "presenting",
+      "summary": "生成竖版封面提示词，可选 MCP 直出",
+      "invoke_phrases": ["封面", "封面设计"],
+      "default_sink": "90_export",
+      "optional_config": "config.md / mcp-image"
+    }
+  ]
+}

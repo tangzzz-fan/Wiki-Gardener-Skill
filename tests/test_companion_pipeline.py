@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -18,30 +19,22 @@ SKILLS = ROOT / "skills"
 sys.path.insert(0, str(ROOT / "scripts"))
 import validate_skills as vs  # noqa: E402
 
-THINKING = (
-    "grill-me",
-    "topic-resonate",
-    "content-diagnose",
-    "script-flow",
-    "content-decomposer",
+CATALOG_PATH = (
+    SKILLS / "setup-knowledge-skills" / "assets" / "companion-catalog.json"
 )
-PRESENTING = (
-    "frontend-slides",
-    "ian-xiaohei-illustrations",
-    "gbro-cover-design",
-)
-ALL_COMPANIONS = THINKING + PRESENTING
+CATALOG = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))["companions"]
 
-# description 里须能匹配的用户口语 / 关键词（技能发现依赖 description）
+
+def _names(category: str) -> tuple[str, ...]:
+    return tuple(item["name"] for item in CATALOG if item["category"] == category)
+
+
+THINKING = _names("thinking")
+REVISION = _names("revision")
+PRESENTING = _names("presenting")
+ALL_COMPANIONS = THINKING + REVISION + PRESENTING
 INVOKE_PHRASES: dict[str, tuple[str, ...]] = {
-    "grill-me": ("grill", "想法很糊", "观点梳清楚", "grill me"),
-    "topic-resonate": ("打中人", "共鸣"),
-    "content-diagnose": ("内容怎么做", "内容诊断"),
-    "script-flow": ("逻辑延续", "划走"),
-    "content-decomposer": ("拆解", "对标"),
-    "frontend-slides": ("presentation", "slides", "演示"),
-    "ian-xiaohei-illustrations": ("配图", "小黑"),
-    "gbro-cover-design": ("封面", "封面设计"),
+    item["name"]: tuple(item["invoke_phrases"]) for item in CATALOG
 }
 
 
@@ -94,12 +87,11 @@ def test_thinking_skills_expose_when_to_trigger_section():
 
 
 def test_setup_lists_companions_and_evoke_handoffs():
-    """setup 探测表点名 companion；糊想法可交接 grill；勿编造未安装；支持选装。"""
+    """setup 从 catalog 探测 companion；糊想法可交接 grill；支持选装。"""
     setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    for name in ALL_COMPANIONS:
-        assert name in setup, f"setup missing companion listing: {name}"
+    assert "assets/companion-catalog.json" in setup
     assert "帮我 grill" in setup or "grill-me" in setup
     assert "90_export" in setup
     assert "勿编造" in setup or "不编造" in setup
@@ -108,16 +100,19 @@ def test_setup_lists_companions_and_evoke_handoffs():
     assert "这个选题能不能打中人" in setup
     assert "按我的标准拆解这条对标" in setup
     assert ".agents/skills" in setup
+    assert ".codex/skills" in setup
+    assert ".cursor/skills" in setup
     assert "更新提示" in setup
     assert "刷新技能包说明" in setup or "update" in setup.lower()
 
     pack = (
         SKILLS / "setup-knowledge-skills" / "assets" / "技能包说明.md"
     ).read_text(encoding="utf-8")
-    for name in THINKING:
+    for name in ALL_COMPANIONS:
         assert name in pack, name
     assert "90_export" in pack
-    assert "{{STATUS_grill-me}}" in pack
+    for name in ALL_COMPANIONS:
+        assert f"{{{{STATUS_{name}}}}}" in pack
     assert "未装" in pack
     assert "--skill grill-me" in pack or "选装" in pack
     assert "## 更新提示" in pack
@@ -149,6 +144,10 @@ def test_expert_writing_dedupes_grill_and_offers_export():
     assert "帮我 grill 一下" in writing
     assert "90_export" in writing
     assert "frontend-slides" in writing or "呈现 companion" in writing
+
+    expert = (SKILLS / "domain-expert" / "SKILL.md").read_text(encoding="utf-8")
+    assert "已有 `grill-me` 共识提纲" in expert
+    assert "review-reviser" in expert
 
 
 def test_thinking_handoff_chain():
@@ -209,6 +208,16 @@ def test_presenting_forbid_domain_tree_require_export():
         ), name
 
 
+def test_review_reviser_requires_approval_and_recheck():
+    text = (SKILLS / "review-reviser" / "SKILL.md").read_text(encoding="utf-8")
+    assert "10_inbox" in text
+    assert "20_领域" in text
+    assert "批准" in text or "确认" in text
+    assert "high" in text
+    assert "domain-expert" in text
+    assert "seedling" in text
+
+
 def test_image_companions_soft_wire_mcp_with_fallback():
     """配图/封面可选用本机 mcp-image，但须可降级且不硬绑密钥。"""
     ian = (SKILLS / "ian-xiaohei-illustrations" / "SKILL.md").read_text(
@@ -266,6 +275,7 @@ def test_eval_and_flow_doc_cover_companion_evoke():
     assert "10_inbox" in flow_text
     assert "90_export" in flow_text
     assert "存在性先于形态性" in flow_text
+    assert "review-reviser" in flow_text
     assert "更新说明" in flow_text
 
     update_doc = ROOT / "docs" / "更新说明.md"
@@ -294,3 +304,11 @@ def test_install_glob_will_include_companions():
     # 目录层：companion 确实在 skills/ 下，会被 * 扫到
     discovered = {p.name for p in vs.discover_skill_dirs(ROOT)}
     assert set(ALL_COMPANIONS) <= discovered
+
+
+def test_short_video_gate_is_conditional_in_setup():
+    setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "仅当用户明确在做短视频" in setup
+    assert "其他用户不播报" in setup

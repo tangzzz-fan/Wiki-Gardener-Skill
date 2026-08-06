@@ -18,6 +18,7 @@ validate_skills.py — 开源前结构校验
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -25,6 +26,8 @@ from pathlib import Path
 SKILLS_CONTAINER = "skills"
 # 至少要有的包（新增 companion 不必写进此元组，放进 skills/ 即可被发现）
 REQUIRED_SKILLS = ("wiki-gardener", "domain-expert", "setup-knowledge-skills")
+COMPANION_CATEGORIES = {"thinking", "revision", "presenting"}
+COMPANION_SINKS = {"10_inbox", "90_export"}
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 REF_RE = re.compile(
     r"`((?:references|assets|scripts)/[A-Za-z0-9_./\-]+)`"
@@ -306,6 +309,75 @@ def check_dup_scan_import(root: Path) -> list[str]:
     return []
 
 
+def check_companion_catalog(root: Path) -> list[str]:
+    """Validate setup's runtime companion registry against installed packages."""
+    errors: list[str] = []
+    catalog_path = (
+        root
+        / SKILLS_CONTAINER
+        / "setup-knowledge-skills"
+        / "assets"
+        / "companion-catalog.json"
+    )
+    if not catalog_path.is_file():
+        return ["setup-knowledge-skills: 缺少 assets/companion-catalog.json"]
+
+    try:
+        payload = json.loads(catalog_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as e:
+        return [f"companion catalog 无法读取: {e}"]
+
+    if payload.get("schema_version") != 1:
+        errors.append("companion catalog: schema_version 必须为 1")
+    companions = payload.get("companions")
+    if not isinstance(companions, list) or not companions:
+        return errors + ["companion catalog: companions 必须是非空列表"]
+
+    seen: set[str] = set()
+    for item in companions:
+        if not isinstance(item, dict):
+            errors.append("companion catalog: 每项必须是对象")
+            continue
+        name = item.get("name", "")
+        category = item.get("category")
+        sink = item.get("default_sink")
+        phrases = item.get("invoke_phrases")
+        summary = item.get("summary")
+
+        if not name or name in seen:
+            errors.append(f"companion catalog: 名称为空或重复 → {name!r}")
+            continue
+        seen.add(name)
+        if category not in COMPANION_CATEGORIES:
+            errors.append(f"{name}: category 非法 → {category!r}")
+        if sink not in COMPANION_SINKS:
+            errors.append(f"{name}: default_sink 非法 → {sink!r}")
+        if not isinstance(summary, str) or not summary.strip():
+            errors.append(f"{name}: summary 为空")
+        if not isinstance(phrases, list) or not phrases or not all(
+            isinstance(p, str) and p.strip() for p in phrases
+        ):
+            errors.append(f"{name}: invoke_phrases 必须是非空字符串列表")
+
+        skill_dir = root / SKILLS_CONTAINER / name
+        skill_md = skill_dir / "SKILL.md"
+        if not skill_md.is_file():
+            errors.append(f"{name}: catalog 指向不存在的 skill")
+            continue
+        meta, body = parse_frontmatter(skill_md.read_text(encoding="utf-8"))
+        desc = meta.get("description", "")
+        for phrase in phrases if isinstance(phrases, list) else []:
+            if phrase not in desc:
+                errors.append(f"{name}: description 缺触发语 → {phrase}")
+        expected_path = "10_inbox" if sink == "10_inbox" else "90_export"
+        if expected_path not in body:
+            errors.append(f"{name}: 正文缺默认落点 → {expected_path}")
+        if not (skill_dir / "NOTICE").is_file():
+            errors.append(f"{name}: 缺少 NOTICE")
+
+    return errors
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="校验 skill 结构")
     ap.add_argument(
@@ -337,6 +409,7 @@ def main() -> int:
         all_errors.extend(check_persona_and_domain_seeds(skill_dir))
 
     all_errors.extend(check_dup_scan_import(root))
+    all_errors.extend(check_companion_catalog(root))
 
     if all_errors:
         print("FAIL: structure validation")

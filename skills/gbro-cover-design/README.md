@@ -72,11 +72,11 @@
 ## 安装
 
 ```bash
-git clone https://github.com/pyang5166/gbro-cover-design.git \
-  ~/.claude/skills/gbro-cover-design
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill gbro-cover-design
 ```
 
-注意：风格模板和示例提示词库在 `references/` 目录里，SKILL.md 单文件不完整，请完整 clone。
+该命令会连同 `references/` 风格模板与示例一起安装；不要只复制 `SKILL.md`。
 
 ---
 

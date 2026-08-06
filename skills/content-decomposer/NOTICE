@@ -1,0 +1,5 @@
+This skill adapts the benchmark-decomposition workflow from the dontbesilent
+toolkit for use in the Wiki Gardener companion pipeline.
+
+The adaptation adds vault handoff rules, 10_inbox placement, and explicit
+boundaries with domain-expert and wiki-gardener.

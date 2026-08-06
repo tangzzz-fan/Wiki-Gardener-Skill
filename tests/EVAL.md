@@ -212,8 +212,9 @@ python3 scripts/score_constitution.py \
 
 **准备**：已初始化 vault；`10_inbox/` 为空；已有相关域档案（如 `iOS开发` 或 `架构设计`）  
 **触发**：「想用插件模式开发一个 Swift 网络库」（仅此一句，不先丢文件）  
+**路由说明**：只装核心三件套时直接由 `domain-expert` 追问；全量安装且主张、受众、边界三项缺两项以上时，可先交 `grill-me`，但最终仍须回专家执笔。
 **必须**：
-- [ ] 进入 **domain-expert 执笔**（若先命中园丁：须交接写手，不替用户硬写进 `20_领域/`）
+- [ ] 最终进入 **domain-expert 执笔**（若先命中园丁：须交接写手；若先 grill：须交付共识提纲；均不替用户硬写进 `20_领域/`）
 - [ ] 先追问 + 开场必收（对照域档案协议），不因一句话直接成文
 - [ ] 读域档案「写作立场 / 执笔协议」成文（可被用户改档案调教）
 - [ ] 成文只落 `10_inbox/`，`origin: chat`、`status: draft`
@@ -315,6 +316,15 @@ python3 scripts/score_constitution.py \
 **必须**：
 - [ ] `script-flow` 可诊断/改稿，但不等于运营放行
 - [ ] 短视频向仍提醒存在性先于形态性；成稿进 inbox 而非 `20_领域/`
+
+**C3-f. 审查 → 修订 → 复审 → 吸附**
+**准备**：已安装 `review-reviser`；`10_inbox/` 有一篇草稿与 `domain-expert` 审查报告，至少含一个 high finding
+**触发**：「按审查报告修订这篇草稿」
+**必须**：
+- [ ] `review-reviser` 先列 finding、修改位置与验收方式，获用户批准后才改
+- [ ] 只修改 `10_inbox/` 草稿或用户明确指定文件，不写 `20_领域/`
+- [ ] 给出 finding 处理账本，不自行宣称 `pass` 或把状态改成 `seedling`
+- [ ] high finding 修后交 `domain-expert` 复审；复审通过后才提示「整理 inbox」
 
 ---
 

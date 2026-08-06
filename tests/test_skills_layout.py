@@ -1,6 +1,7 @@
 """skills/ 包布局与 setup-knowledge-skills 契约。"""
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -88,31 +89,22 @@ def test_gardener_hands_off_sparse_ideas_to_writer():
 
 
 def test_companion_packages_present_with_vault_contract():
-    """思考/呈现 companion 已落 skills/，并带 inbox / 90_export 边界。"""
-    thinking = (
-        "grill-me",
-        "topic-resonate",
-        "content-diagnose",
-        "script-flow",
-        "content-decomposer",
+    """catalog 中 companion 已落 skills/，并带默认落盘边界。"""
+    catalog = json.loads(
+        (
+            SKILLS
+            / "setup-knowledge-skills"
+            / "assets"
+            / "companion-catalog.json"
+        ).read_text(encoding="utf-8")
     )
-    presenting = (
-        "frontend-slides",
-        "ian-xiaohei-illustrations",
-        "gbro-cover-design",
-    )
-    for name in thinking + presenting:
+    companions = catalog["companions"]
+    for item in companions:
+        name = item["name"]
         skill = (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
         assert f"name: {name}" in skill, name
         assert "20_领域" in skill or "20_领域/" in skill, name
-
-    for name in thinking:
-        skill = (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
-        assert "10_inbox" in skill, name
-
-    for name in presenting:
-        skill = (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
-        assert "90_export" in skill, name
+        assert item["default_sink"] in skill, name
 
     setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
         encoding="utf-8"
@@ -123,6 +115,4 @@ def test_companion_packages_present_with_vault_contract():
     assert "选装" in setup or "--skill grill-me" in setup
     assert "已装" in setup and "未装" in setup
     assert "~/.agents/skills" in setup or ".agents/skills" in setup
-    assert "topic-resonate" in setup
-    assert "content-decomposer" in setup
-    assert "这个选题能不能打中人" in setup or "内容诊断" in setup
+    assert "companion-catalog.json" in setup

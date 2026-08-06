@@ -24,6 +24,7 @@
 | `skills/wiki-gardener/` | 知识库园丁（`docs/` 下放使用与调优指南） |
 | `skills/domain-expert/` | 领域专家（`docs/` 下放使用与调优指南） |
 | `skills/grill-me/` 等 | Companion：内容思考 / 对标拆解 / 呈现导出（可选工具，领域无关） |
+| `skills/review-reviser/` | Companion：按领域专家审查报告修订草稿；修后按严重度复审 |
 | `tests/fixtures/sample-vault/` | 评测用示例库（内含示例域，非产品限定） |
 | `tests/fixtures/interview-personas/` | 访谈风格人设 + 黄金宪章 |
 | `tests/EVAL.md` | L2 行为评测清单 |
@@ -31,6 +32,7 @@
 | `docs/已有知识库接入.md` | 非空乱库如何初始化并处理旧文 |
 | `docs/companion协作流程.md` | Companion 唤起、交接与落盘（经验证） |
 | `docs/MCP-图像能力.md` | 本机 Cursor MCP 生图/识图（可选；密钥不入库） |
+| `docs/vNext路线与释出.md` | 稳定能力、可选能力、后续路线与发布前检查 |
 | `docs/更新说明.md` | 已装用户：update + 再跑 setup 才能看见 companion 提示 |
 | `scripts/` | `install_skills.sh`、校验、打包、禁 emoji、宪章风格评分 |
 
@@ -43,6 +45,7 @@
 | 类 | 包名 | 与核心的关系 |
 |---|---|---|
 | 内容思考 | `grill-me`、`topic-resonate`、`content-diagnose`、`script-flow`、`content-decomposer` | 想清楚 / 拆对标；产物默认可进 `10_inbox/`，不直写 `20_领域/` |
+| 内容修订 | `review-reviser` | 按审查 finding 修订 `10_inbox/` 草稿；high 项交回专家复审，不自行吸附 |
 | 内容呈现 | `frontend-slides`、`ian-xiaohei-illustrations`、`gbro-cover-design` | 从成稿导出演示/配图/封面；默认 `90_export/`（或用户指定路径），不进吸附主路径 |
 
 核心 trio 职责不变：园丁管结构、专家管单篇对错、setup 只管指路。Companion 不得把自媒体写死进核心 SKILL。

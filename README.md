@@ -89,17 +89,43 @@ setup 引导会**探测本机已装哪些 companion**，未装的可推荐上述
 
 1. 支持 Agent Skills 的环境（Claude Code / Codex / Cursor / WorkBuddy 等；Desktop 见备用）  
 2. Node.js（仅安装 / 更新时需要）  
-3. 一个空文件夹当 **vault**（可用 Obsidian，不是必须）——setup 会帮你确认路径
+3. 一个文件夹当 **vault**（可用 Obsidian，不是必须）——新建空目录或接入已有 Markdown 库都可以，建议不要直接使用本代码仓
+4. Python 3（仅运行知识库去重体检时需要）；首次使用前执行 `pip install -r requirements.txt`
 
 ---
 
 ## 装好后怎么用
 
-1. 跑完 **setup-knowledge-skills**（选定 vault）  
-2. 对 vault 说：**「帮我初始化一个知识库」**（wiki-gardener）  
-3. 审稿：**「以 xx 专家的身份，审一下这篇草稿」**（domain-expert）  
+先运行 **setup-knowledge-skills** 选定 vault，再按你的情况复制一句：
 
-日常：材料进 `10_inbox/`，再说「整理一下 inbox」。
+**新库：**
+
+> 帮我初始化一个知识库
+
+**已有 Markdown / Obsidian 库：**
+
+> 当前文件夹是我已有的笔记库（非空）。请按 wiki-gardener「已有知识库接入」初始化：保留旧文件，先建系统骨架与宪章；旧文稍后分批放进 inbox。
+
+日常只需要记住这些：
+
+| 想做什么 | 直接说 |
+|---|---|
+| 想法很糊 | 「帮我 grill 一下这个想法」 |
+| 写成或审查一篇笔记 | 「以 \<领域\> 专家身份写 / 审这篇」 |
+| 收进知识库 | 「整理一下 inbox」 |
+| 查重复、孤儿和过期内容 | 「给知识库做个体检」 |
+| 做演示、配图或封面 | 「把这篇做成 HTML 演示 / 配图 / 封面」 |
+
+完整流向：
+
+```text
+想清楚（可选 companion）
+  → 专家成文 / 审查 → 按报告修订 → 10_inbox/
+  → 园丁吸附 → 20_领域/
+  → 演示 / 配图 / 封面 → 90_export/
+```
+
+核心三件套已经能建库、执笔、审查和吸附；companion 是按需增强，不是使用门槛。
 
 ---
 
@@ -113,7 +139,7 @@ cd Wiki-Gardener-Skill
 ./scripts/pack_skills.sh
 ```
 
-上传生成的 `*.skill`（含 setup / 园丁 / 专家）。Desktop 读账号内 Skills，不是 `~/.claude/skills/`。
+上传生成的 `*.skill`。不带参数时会打包 `skills/` 下全部包；Desktop 读账号内 Skills，不是 `~/.claude/skills/`。
 
 ### 手动拷贝
 
@@ -136,13 +162,14 @@ cp -R skills/* ~/.claude/skills/
 | AI 不像园丁 | `npx skills list -g` 是否有 `wiki-gardener` |
 | `update` 找不到 | 是否曾用 `npx skills add` 安装 |
 | 去重缺库 | `pip install -r requirements.txt`（仅 dup_scan） |
+| companion 被标成未装 | 重跑 setup；它会探测常见 Agent Skills 安装目录 |
 
 ---
 
 ## 给想改包 / 跑测试的人
 
 按自己经验自定义（域档案、防坑论、画像）：[docs/自定义与调教指南.md](./docs/自定义与调教指南.md)。  
-给 Agent 的仓库约定：[AGENTS.md](./AGENTS.md)。
+给 Agent 的仓库约定：[AGENTS.md](./AGENTS.md)。能力状态与释出节奏见 [vNext 路线与释出](./docs/vNext路线与释出.md)。
 
 ```bash
 pip install -r requirements-dev.txt
