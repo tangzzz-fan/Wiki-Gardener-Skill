@@ -53,7 +53,15 @@ description: 生成 Ian 风格的中文正文配图。用于用户要求为中�
 
 ### 3. 单张生成
 
-如果用户明确要求“生成 / 输出 / 做图 / 帮我生成”，不要停下来等确认；用内置 `image_gen` 每张单独生成。不要把多张图拼在一张里。
+如果用户明确要求“生成 / 输出 / 做图 / 帮我生成”，不要停下来等确认；每张图单独生成，不要把多张拼在一张里。
+
+**生图后端（软探测，按序选用，缺则降级）：**
+
+1. **优先**：本机 Cursor MCP `mcp-image` 的 `generate_image` 可用时用它。参数约定：`aspectRatio: "16:9"`；同系列小黑图开 `maintainCharacterConsistency: true`；`purpose` 写清「中文正文配图 / 手绘解释图」；需要改已有图时用 `inputImagePath`（绝对路径）。产物先出现在 MCP 输出目录（常见 `~/.cursor/mcp-image-output/`），再拷到下方交付路径。
+2. **其次**：宿主内置生图（如 `image_gen` / `GenerateImage`）可用则用之，画幅仍按 16:9。
+3. **都没有**：只交付每张图的完整提示词 + shot list，明确告知用户拿去外部模型跑图；**不假装已出图**。
+
+本 skill **不捆绑** MCP、不要求仓库内 API key；配置见仓库 `docs/MCP-图像能力.md`（密钥只在用户本机 `~/.cursor/mcp.json`）。
 
 每张图只讲一个核心结构。提示词必须包含：
 
@@ -79,9 +87,17 @@ description: 生成 Ian 风格的中文正文配图。用于用户要求为中�
 - 画风太可爱、幼稚、死板
 - 背景不是干净白底
 
+**可选识图质检**：本机 `luma-vision` / `image_understand` 可用，且用户要「核对中文 / 是否像 PPT / 小黑是否在干活」时，对**单张**成品图（本地绝对路径，一次一张）做质检，再决定是否重生成。MCP 不可用则跳过，不阻塞交付。约束见 `docs/MCP-图像能力.md`。
+
 ### 5. 保存交付
 
-如果用户在 workspace 内工作，把最终图复制到：
+默认把最终图（及 shot list）落到 vault 或工作区的 **`90_export/`**（或用户指定路径）。若用户明确要求工作区内素材目录，可用：
+
+```text
+90_export/<article-slug>-illustrations/
+```
+
+或（用户指定时）：
 
 ```text
 assets/<article-slug>-illustrations/
@@ -94,7 +110,7 @@ assets/<article-slug>-illustrations/
 02-topic-name.png
 ```
 
-保留原始生成文件，不要覆盖已有资产，除非用户明确要求替换。
+保留原始生成文件，不要覆盖已有资产，除非用户明确要求替换。勿把整个 MCP 输出目录提交进库。
 
 ## 输出口径
 
@@ -113,5 +129,6 @@ assets/<article-slug>-illustrations/
 2. 生成图与 shot list 默认落到 vault（或工作区）的 **`90_export/`**，或用户指定路径。  
 3. 文章源可以是已吸附笔记或 `10_inbox/` 草稿；本 skill 只负责呈现，不管该不该收进库。  
 4. 配图 examples 示例目录 **本分发包未附带**；风格以 `references/` 为准。勿编造必须打开 examples。  
-5. 禁止 emoji（人话与策略输出用文本标签）。
+5. 禁止 emoji（人话与策略输出用文本标签）。  
+6. 生图/识图 MCP 为**可选宿主能力**，不是本包安装依赖；见 `docs/MCP-图像能力.md`。
 

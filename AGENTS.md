@@ -30,6 +30,7 @@
 | `docs/自定义与调教指南.md` | 克隆后按个人经验改域档案 / 种子 / 流程 |
 | `docs/已有知识库接入.md` | 非空乱库如何初始化并处理旧文 |
 | `docs/companion协作流程.md` | Companion 唤起、交接与落盘（经验证） |
+| `docs/MCP-图像能力.md` | 本机 Cursor MCP 生图/识图（可选；密钥不入库） |
 | `docs/更新说明.md` | 已装用户：update + 再跑 setup 才能看见 companion 提示 |
 | `scripts/` | `install_skills.sh`、校验、打包、禁 emoji、宪章风格评分 |
 

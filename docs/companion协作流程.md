@@ -21,7 +21,7 @@
 | 思考 companion | `content-decomposer` | 对标拆解（有效/可参考/不可照搬/下一步） | 升格为领域定论 |
 | 呈现 companion | `frontend-slides` | HTML 演示 | 吸附 |
 | 呈现 companion | `ian-xiaohei-illustrations` | 正文配图 | 吸附 |
-| 呈现 companion | `gbro-cover-design` | 封面提示词 | 吸附 |
+| 呈现 companion | `gbro-cover-design` | 封面提示词（可选 MCP 直出） | 吸附 |
 
 **唤起前提**：全量安装（`./scripts/install_skills.sh` 或 `--skill '*'`）会带上全部 companion。也可**选装**：只装核心，或按需 `--skill grill-me` 等。  
 setup 会探测 `~/.agents/skills` / `~/.claude/skills`：**未装则推荐命令，不假装已可唤起**。详见 setup skill 的「1b. 可选安装推荐」。
@@ -85,7 +85,8 @@ flowchart LR
 
 - 输入：已成稿笔记或 `10_inbox/` 草稿均可。  
 - 输出：**仅** `90_export/`（或用户指定路径）。  
-- **禁止**写入 `20_领域/`；误进 inbox 时园丁应提示挪到导出目录，不当作吸附成功。
+- **禁止**写入 `20_领域/`；误进 inbox 时园丁应提示挪到导出目录，不当作吸附成功。  
+- **可选 MCP（宿主级）**：本机接好 `mcp-image` / `luma-vision` 时，`ian-xiaohei` 可直出配图、`gbro-cover` 在出提示词后可选直出封面；未配置则提示词 / shot list 回退。说明见 [MCP-图像能力.md](./MCP-图像能力.md)。核心 skill **不**硬绑 MCP。
 
 ---
 
@@ -95,7 +96,7 @@ flowchart LR
 |---|---|---|
 | 提纲 / 诊断单 / 拆解 / 脚本改稿 / 专家正文 | `10_inbox/` | `origin: chat` 或 `reference`；`status: draft` |
 | 已吸附笔记 | `20_领域/` | 仅园丁吸附后写入 |
-| HTML / 配图 / 封面提示词 | `90_export/` | 不进吸附主路径 |
+| HTML / 配图 / 封面提示词（及可选 MCP 成品图） | `90_export/` | 不进吸附主路径 |
 | 拒收供体 | `90_archive/` | 园丁归档 |
 
 ---
@@ -120,6 +121,7 @@ python3 -m pytest -v tests/test_companion_pipeline.py tests/test_skills_layout.p
 - C3-b decomposer → inbox → 吸附  
 - C3-c 呈现类拒绝进 `20_领域/`  
 - C3-d 脚本检查不绕过存在性  
+- C3-e 呈现 MCP 软接线（有则直出、无则提示词回退）  
 
 建议：全量安装后新开会话，对复制出的 fixture vault 逐条跑。
 

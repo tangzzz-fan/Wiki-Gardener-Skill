@@ -50,8 +50,10 @@ metadata:
 | Skill | 一句话 |
 |---|---|
 | `frontend-slides` | HTML 演示 |
-| `ian-xiaohei-illustrations` | 正文配图 |
-| `gbro-cover-design` | 封面提示词 |
+| `ian-xiaohei-illustrations` | 正文配图（本机有 `mcp-image` 时可直出） |
+| `gbro-cover-design` | 封面提示词（本机有 `mcp-image` 时可选直出） |
+
+呈现类不依赖 MCP 也能用（提示词 / shot list 回退）。本机若已配置 Cursor MCP 生图/识图，可点名「用 mcp-image 生图」「用 luma 识图」；说明见仓库 `docs/MCP-图像能力.md`。**勿把密钥写进 vault 或本仓库。**
 
 ## 流程
 
@@ -182,6 +184,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 - [ ] 知道园丁管结构、专家管单篇对错  
 - [ ] 已知道哪些 companion **已装 / 未装**；未装者不假装可用  
 - [ ] 若装了思考 companion：产物进 `10_inbox/`；呈现进 `90_export/`  
+- [ ] （可选）本机 Cursor MCP：`mcp-image` 生图 / `luma-vision` 识图已连上则呈现 companion 可直出或质检；未配置则只用提示词回退  
 - [ ] 若未初始化：下一步触发园丁初始化  
 - [ ] 更新：`npx skills@latest update -g -y`
 

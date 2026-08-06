@@ -209,6 +209,38 @@ def test_presenting_forbid_domain_tree_require_export():
         ), name
 
 
+def test_image_companions_soft_wire_mcp_with_fallback():
+    """配图/封面可选用本机 mcp-image，但须可降级且不硬绑密钥。"""
+    ian = (SKILLS / "ian-xiaohei-illustrations" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "mcp-image" in ian
+    assert "generate_image" in ian
+    assert "16:9" in ian
+    assert "不假装" in ian or "降级" in ian
+    assert "MCP-图像能力" in ian
+
+    gbro = (SKILLS / "gbro-cover-design" / "SKILL.md").read_text(encoding="utf-8")
+    assert "mcp-image" in gbro
+    assert "3:4" in gbro
+    assert "提示词" in gbro
+    assert "可选" in gbro
+    assert "MCP-图像能力" in gbro
+
+    setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "mcp-image" in setup
+    assert "MCP-图像能力" in setup
+
+    mcp_doc = ROOT / "docs" / "MCP-图像能力.md"
+    assert mcp_doc.is_file()
+    mcp_text = mcp_doc.read_text(encoding="utf-8")
+    assert "ian-xiaohei" in mcp_text
+    assert "gbro-cover" in mcp_text
+    assert "密钥" in mcp_text
+
+
 def test_thinking_forbid_domain_require_inbox():
     for name in THINKING:
         text = (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
