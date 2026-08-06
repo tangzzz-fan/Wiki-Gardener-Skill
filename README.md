@@ -10,7 +10,7 @@
 | **setup-knowledge-skills** | 装完后的一次性引导（选 vault、指路） | 定北极星、写正文 |
 | **wiki-gardener**（园丁） | 建库、收纳、去重、体检 | 单篇事实对不对、帮你改文笔 |
 | **domain-expert**（领域专家） | 按你指定的领域审稿 / 执笔 | 该不该收进库、放哪一格 |
-| **Companion**（可选） | 内容思考（选题/拆解/脚本）与呈现导出（演示/配图/封面） | 替代园丁吸附或专家审稿 |
+| **Companion**（可选） | 内容思考、学习检查与呈现导出 | 替代园丁吸附、专家审稿或直接改学习状态 |
 
 协作习惯：**先审对不对，再决定收不收。** 呈现类默认落到 vault 的 `90_export/`，不直写 `20_领域/`。  
 更细的用法：[园丁说明](./skills/wiki-gardener/docs/使用说明与调优指南.md) · [专家说明](./skills/domain-expert/docs/使用说明与调优指南.md) · [skills 目录说明](./skills/README.md) · [Companion 协作流程](./docs/companion协作流程.md)  
@@ -81,6 +81,13 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
   --skill script-flow --skill content-decomposer
 ```
 
+只要学习 companion：
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill knowledge-quiz --skill knowledge-map
+```
+
 setup 引导会**探测本机已装哪些 companion**，未装的可推荐上述选装命令，不强迫。全量装齐后，**同一条** `install_skills.sh` / `add … --skill '*'` 即可。
 
 ---
@@ -114,6 +121,8 @@ setup 引导会**探测本机已装哪些 companion**，未装的可推荐上述
 | 写成或审查一篇笔记 | 「以 \<领域\> 专家身份写 / 审这篇」 |
 | 收进知识库 | 「整理一下 inbox」 |
 | 查重复、孤儿和过期内容 | 「给知识库做个体检」 |
+| 检查已入库知识是否掌握 | 「用已入库知识考我」 |
+| 看知识结构与掌握关系 | 「把已入库知识做成掌握地图」 |
 | 做演示、配图或封面 | 「把这篇做成 HTML 演示 / 配图 / 封面」 |
 
 完整流向：
@@ -122,8 +131,11 @@ setup 引导会**探测本机已装哪些 companion**，未装的可推荐上述
 想清楚（可选 companion）
   → 专家成文 / 审查 → 按报告修订 → 10_inbox/
   → 园丁吸附 → 20_领域/
+  → 测验 → 00_系统/学习记录/ → 知识图 → 90_export/
   → 演示 / 配图 / 封面 → 90_export/
 ```
+
+学习支路只读取已入库知识：测验记录是 `00_系统/` 资产，不放进 `10_inbox/`；知识图只做呈现，不修改掌握状态。
 
 核心三件套已经能建库、执笔、审查和吸附；companion 是按需增强，不是使用门槛。
 

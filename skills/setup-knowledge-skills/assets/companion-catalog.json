@@ -44,6 +44,20 @@
       "default_sink": "10_inbox"
     },
     {
+      "name": "knowledge-quiz",
+      "category": "learning",
+      "summary": "基于已入库知识测验理解程度，并把错题与掌握结果留作学习记录",
+      "invoke_phrases": ["考我", "知识测验", "理解检查", "错题复习"],
+      "default_sink": "00_系统/学习记录"
+    },
+    {
+      "name": "knowledge-map",
+      "category": "presenting",
+      "summary": "把已入库知识整理成知识地图，呈现结构与掌握关系",
+      "invoke_phrases": ["知识地图", "思维导图", "结构化理解", "掌握地图"],
+      "default_sink": "90_export"
+    },
+    {
       "name": "frontend-slides",
       "category": "presenting",
       "summary": "新建或转换 HTML 演示，并可导出 PDF 或在线分享",

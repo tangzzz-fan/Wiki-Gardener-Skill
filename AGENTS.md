@@ -23,8 +23,9 @@
 | `skills/setup-knowledge-skills/` | 安装后一次性引导 |
 | `skills/wiki-gardener/` | 知识库园丁（`docs/` 下放使用与调优指南） |
 | `skills/domain-expert/` | 领域专家（`docs/` 下放使用与调优指南） |
-| `skills/grill-me/` 等 | Companion：内容思考 / 对标拆解 / 呈现导出（可选工具，领域无关） |
+| `skills/grill-me/` 等 | Companion：内容思考 / 对标拆解 / 学习检查 / 呈现导出（可选工具，领域无关） |
 | `skills/review-reviser/` | Companion：按领域专家审查报告修订草稿；修后按严重度复审 |
+| `skills/knowledge-quiz/`、`skills/knowledge-map/` | Companion：已入库知识测验与知识图；记录属 `00_系统/`，图导出到 `90_export/` |
 | `tests/fixtures/sample-vault/` | 评测用示例库（内含示例域，非产品限定） |
 | `tests/fixtures/interview-personas/` | 访谈风格人设 + 黄金宪章 |
 | `tests/EVAL.md` | L2 行为评测清单 |
@@ -46,7 +47,9 @@
 |---|---|---|
 | 内容思考 | `grill-me`、`topic-resonate`、`content-diagnose`、`script-flow`、`content-decomposer` | 想清楚 / 拆对标；产物默认可进 `10_inbox/`，不直写 `20_领域/` |
 | 内容修订 | `review-reviser` | 按审查 finding 修订 `10_inbox/` 草稿；high 项交回专家复审，不自行吸附 |
+| 学习检查 | `knowledge-quiz` | 只读已入库知识出题；结果进 `00_系统/学习记录/`，不进 `10_inbox/` |
 | 内容呈现 | `frontend-slides`、`ian-xiaohei-illustrations`、`gbro-cover-design` | 从成稿导出演示/配图/封面；默认 `90_export/`（或用户指定路径），不进吸附主路径 |
+| 学习呈现 | `knowledge-map` | 只读已入库知识与学习记录生成知识图；默认 `90_export/`，不得修改掌握状态 |
 
 核心 trio 职责不变：园丁管结构、专家管单篇对错、setup 只管指路。Companion 不得把自媒体写死进核心 SKILL。
 

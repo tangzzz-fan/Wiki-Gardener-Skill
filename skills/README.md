@@ -20,11 +20,13 @@
 | `script-flow/` | 思考 | 口播/脚本逻辑延续与划走风险 |
 | `content-decomposer/` | 思考 | 对标内容拆解 → 可进 `10_inbox/` |
 | `review-reviser/` | 修订 | 按专家审查报告逐条修订 → 复审 |
+| `knowledge-quiz/` | 学习 | 基于已入库知识做测验 → `00_系统/学习记录/` |
+| `knowledge-map/` | 呈现 | 只读知识与学习记录，导出知识图 → `90_export/` |
 | `frontend-slides/` | 呈现 | 脚本/文稿 → HTML 演示；导出到 `90_export/` |
 | `ian-xiaohei-illustrations/` | 呈现 | 正文配图；本机有 `mcp-image` 时可直出 |
 | `gbro-cover-design/` | 呈现 | 封面提示词（可选 MCP 直出；本地 `config.md` 不入库） |
 
-思考类产物默认可进 `10_inbox/`；呈现类不直写 `20_领域/`。本机 Cursor 生图/识图 MCP 为可选宿主能力，见 [docs/MCP-图像能力.md](../docs/MCP-图像能力.md)。协作流程（唤起与落盘）：[docs/companion协作流程.md](../docs/companion协作流程.md)。新增 companion：**在本目录下新建同级文件夹**（内含 `SKILL.md`），不要放回仓库根目录。
+思考类产物默认可进 `10_inbox/`；学习类把测验结果写入 `00_系统/学习记录/`，不参与吸附；呈现类不直写 `20_领域/`，也不修改学习状态。学习支路为：已入库知识 → 测验记录 → 知识图。本机 Cursor 生图/识图 MCP 为可选宿主能力，见 [docs/MCP-图像能力.md](../docs/MCP-图像能力.md)。协作流程（唤起与落盘）：[docs/companion协作流程.md](../docs/companion协作流程.md)。新增 companion：**在本目录下新建同级文件夹**（内含 `SKILL.md`），不要放回仓库根目录。
 
 ```bash
 npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'

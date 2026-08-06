@@ -14,6 +14,7 @@
 
 ## 可选与实验
 
+- 学习 companion 首版为可选能力：`knowledge-quiz` 基于已入库知识测验并写入 `00_系统/学习记录/`；`knowledge-map` 只读生成知识图并导出到 `90_export/`
 - `mcp-image` / `luma-vision` 是宿主级可选能力；未配置时配图和封面回退到提示词或 shot list
 - HTML 演示的在线部署与 PDF 导出依赖外部工具，使用前会单独确认
 - L2 Agent 行为评测仍是人工运行，不作为自动 CI 结论
@@ -21,6 +22,7 @@
 ## 后续路线
 
 - 从决策日志生成健康快照：批准率、孤儿率、域增长和自治建议
+- 学习闭环后续：间隔复习排程、可选提醒，以及学习记录与知识图的更多导出格式
 - 固定 prompt、vault 快照和评分器的半自动 L2 评测
 - 统一仓库版本、tag、CHANGELOG 与 GitHub Release 流程
 - 更完整的 Python / Node 兼容矩阵

@@ -31,8 +31,9 @@ def _names(category: str) -> tuple[str, ...]:
 
 THINKING = _names("thinking")
 REVISION = _names("revision")
+LEARNING = _names("learning")
 PRESENTING = _names("presenting")
-ALL_COMPANIONS = THINKING + REVISION + PRESENTING
+ALL_COMPANIONS = THINKING + REVISION + LEARNING + PRESENTING
 INVOKE_PHRASES: dict[str, tuple[str, ...]] = {
     item["name"]: tuple(item["invoke_phrases"]) for item in CATALOG
 }
@@ -208,6 +209,63 @@ def test_presenting_forbid_domain_tree_require_export():
         ), name
 
 
+def test_learning_and_map_catalog_contract():
+    entries = {item["name"]: item for item in CATALOG}
+
+    quiz = entries["knowledge-quiz"]
+    assert quiz["category"] == "learning"
+    assert quiz["default_sink"] == "00_系统/学习记录"
+    for phrase in ("考我", "知识测验", "理解检查", "错题复习"):
+        assert phrase in quiz["invoke_phrases"]
+
+    knowledge_map = entries["knowledge-map"]
+    assert knowledge_map["category"] == "presenting"
+    assert knowledge_map["default_sink"] == "90_export"
+    for phrase in ("知识地图", "思维导图", "结构化理解", "掌握地图"):
+        assert phrase in knowledge_map["invoke_phrases"]
+
+
+def test_setup_and_gardener_route_learning_companions():
+    setup = (SKILLS / "setup-knowledge-skills" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    gardener = (SKILLS / "wiki-gardener" / "SKILL.md").read_text(encoding="utf-8")
+
+    for text, source in ((setup, "setup"), (gardener, "gardener")):
+        assert "knowledge-quiz" in text, source
+        assert "knowledge-map" in text, source
+        assert "00_系统/学习记录" in text, source
+        assert "90_export" in text, source
+        assert "20_领域" in text, source
+
+
+def test_knowledge_quiz_reads_sources_and_history_without_replacing_expert():
+    text = (SKILLS / "knowledge-quiz" / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "00_系统/学习记录" in text
+    assert ".md" in text or "Markdown" in text
+    assert "20_领域" in text
+    assert "domain-expert" in text
+    assert "来源" in text
+    assert "历史" in text or "学习记录" in text
+    assert "先读" in text or "读取" in text
+    assert "禁止" in text or "不直写" in text
+    assert "不替代" in text or "不能替代" in text
+
+
+def test_knowledge_map_anchors_sources_exports_without_changing_mastery():
+    text = (SKILLS / "knowledge-map" / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "来源" in text
+    assert "[[来源笔记#标题]]" in text or "来源锚点" in text
+    assert "追溯" in text
+    assert "90_export" in text
+    assert "20_领域" in text
+    assert "掌握" in text
+    assert "禁止" in text or "不得" in text or "不修改" in text
+    assert "不修改" in text or "只读" in text or "不得改" in text
+
+
 def test_review_reviser_requires_approval_and_recheck():
     text = (SKILLS / "review-reviser" / "SKILL.md").read_text(encoding="utf-8")
     assert "10_inbox" in text
@@ -265,6 +323,14 @@ def test_eval_and_flow_doc_cover_companion_evoke():
     assert "grill" in eval_md.lower()
     assert "content-decomposer" in eval_md or "decomposer" in eval_md
     assert "90_export" in eval_md
+    assert "knowledge-quiz 学习闭环" in eval_md
+    assert "逐题" in eval_md
+    assert "00_系统/学习记录" in eval_md
+    assert "避开已掌握概念" in eval_md
+    assert "knowledge-map 只读呈现" in eval_md
+    assert "来源锚点" in eval_md
+    assert "不修改 `00_系统/学习记录/`" in eval_md
+    assert "domain-expert" in eval_md
 
     flow = ROOT / "docs" / "companion协作流程.md"
     assert flow.is_file(), "missing docs/companion协作流程.md"

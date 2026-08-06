@@ -26,8 +26,8 @@ from pathlib import Path
 SKILLS_CONTAINER = "skills"
 # 至少要有的包（新增 companion 不必写进此元组，放进 skills/ 即可被发现）
 REQUIRED_SKILLS = ("wiki-gardener", "domain-expert", "setup-knowledge-skills")
-COMPANION_CATEGORIES = {"thinking", "revision", "presenting"}
-COMPANION_SINKS = {"10_inbox", "90_export"}
+COMPANION_CATEGORIES = {"thinking", "revision", "presenting", "learning"}
+COMPANION_SINKS = {"10_inbox", "00_系统/学习记录", "90_export"}
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 REF_RE = re.compile(
     r"`((?:references|assets|scripts)/[A-Za-z0-9_./\-]+)`"
@@ -369,9 +369,8 @@ def check_companion_catalog(root: Path) -> list[str]:
         for phrase in phrases if isinstance(phrases, list) else []:
             if phrase not in desc:
                 errors.append(f"{name}: description 缺触发语 → {phrase}")
-        expected_path = "10_inbox" if sink == "10_inbox" else "90_export"
-        if expected_path not in body:
-            errors.append(f"{name}: 正文缺默认落点 → {expected_path}")
+        if sink not in body:
+            errors.append(f"{name}: 正文缺默认落点 → {sink}")
         if not (skill_dir / "NOTICE").is_file():
             errors.append(f"{name}: 缺少 NOTICE")
 

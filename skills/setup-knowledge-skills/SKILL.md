@@ -39,6 +39,7 @@ metadata:
 
 - `thinking`：想清楚，产物默认可进 `10_inbox/`
 - `revision`：按审查报告修订，仍留在 `10_inbox/` 并交回复审
+- `learning`：基于已入库知识做理解检查，记录进 `00_系统/学习记录/`
 - `presenting`：导出到 `90_export/`，不进吸附
 
 呈现类不依赖 MCP 也能用（提示词 / shot list 回退）。本机若已配置 Cursor MCP 生图/识图，可点名「用 mcp-image 生图」「用 luma-vision 识图」；说明见仓库 `docs/MCP-图像能力.md`。**勿把密钥写进 vault 或本仓库。**
@@ -73,7 +74,7 @@ metadata:
 
 ### 1b. 可选安装推荐（用户同意再给命令）
 
-不默认执行安装。用户说「装思考工具 / 装呈现 / 全装 companion」时再给终端命令。
+不默认执行安装。用户说「装思考工具 / 装学习工具 / 装呈现 / 全装 companion」时再给终端命令。
 
 **只装核心（已够建库）：**
 
@@ -94,6 +95,13 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
 
 ```bash
 npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill review-reviser
+```
+
+**选装学习闭环：**
+
+```bash
+npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill knowledge-quiz --skill knowledge-map
 ```
 
 **选装呈现：**
@@ -124,7 +132,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 |---|---|---|
 | Vault 路径 | 「笔记库用当前文件夹，还是另指定路径？」 | 协作说明 |
 | 新库 or 已有 | 「从零初始化，还是接入已有 Markdown 库？」 | 分支；乱库见 `docs/已有知识库接入.md` |
-| Companion（仅当有未装且用户可能要） | 「要不要选装思考工具（grill/选题/拆对标）？呈现类可以后再装。」 | 选装则给 1b 命令；跳过则只记核心 |
+| Companion（仅当有未装且用户可能要） | 「要不要选装思考、学习或呈现工具？都可以后装。」 | 选装则给 1b 命令；跳过则只记核心 |
 
 第三问若 vault/新旧已在前两问说清，可把「companion 选装」当作本轮唯一空档；用户赶时间则默认跳过选装。
 
@@ -140,6 +148,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 
 ```
 00_系统/
+  学习记录/              # 可选：测验结果与错题记录；不进吸附
 10_inbox/
 20_领域/
 90_archive/
@@ -147,6 +156,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 ```
 
 `90_export/` 给呈现 companion；缺失不阻塞园丁初始化。  
+`00_系统/学习记录/` 给学习 companion；缺失时可在首次测验落盘前创建。
 **不要**预建域档案或深主题目录。
 
 工作区是代码仓而非 vault：不要强行建 `10_inbox/`。
@@ -165,12 +175,18 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 拆对标（需已装 content-decomposer） | 「按我的标准拆解这条对标」→ **content-decomposer** |
 | 口播划走（需已装 script-flow） | 「检查这段口播哪里会划走」→ **script-flow** |
 | 审查报告要求修订（需已装 review-reviser） | 「按审查报告修订这篇草稿」→ **review-reviser**；high 项修后交专家复审 |
+| 检查已入库知识掌握度（需已装 knowledge-quiz） | 「用已入库知识考我」→ **knowledge-quiz**；记录进 `00_系统/学习记录/` |
+| 看知识结构与掌握情况（需已装 knowledge-map） | 「把已入库知识做成掌握地图」→ **knowledge-map**；只读笔记与学习记录，导出到 `90_export/` |
 | 刚 update，要刷新说明 | 本 skill：探测 companion + 重写 `技能包说明.md` 的「更新提示」节 |
 | 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」，然后再跑本 setup |
 
 思考链路（已装齐时对人一句）：
 
 > 想清楚：grill / resonate → diagnose →（口播）script-flow / decomposer → 专家成文进 `10_inbox/` → 园丁吸附。呈现类进 `90_export/`。
+
+学习支路（相关包已装时对人一句）：
+
+> 已入库知识 → knowledge-quiz 测验 → `00_系统/学习记录/` → knowledge-map 只读汇总 → `90_export/`。测验记录不是 inbox 材料，知识图也不改掌握状态。
 
 仅当用户明确在做短视频，或 vault 存在对应运营 / 编导域档案时，再提醒：**存在性先于形态性**——运营审核 → 编导/脚本 → `10_inbox/`，不直写 `20_领域/`。其他用户不播报这条垂直流程。
 
@@ -181,7 +197,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 - [ ] 已选定 vault 路径  
 - [ ] 知道园丁管结构、专家管单篇对错  
 - [ ] 已知道哪些 companion **已装 / 未装**；未装者不假装可用  
-- [ ] 思考 / 修订产物留在 `10_inbox/`；呈现进 `90_export/`
+- [ ] 思考 / 修订产物留在 `10_inbox/`；学习记录进 `00_系统/学习记录/`；呈现进 `90_export/`
 - [ ] （可选）本机 Cursor MCP：`mcp-image` 生图 / `luma-vision` 识图已连上则呈现 companion 可直出或质检；未配置则只用提示词回退  
 - [ ] 若未初始化：下一步触发园丁初始化  
 - [ ] 更新：`npx skills@latest update -g -y`
@@ -193,7 +209,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 安装后指路、探测/推荐选装 companion | **本 skill** |
 | 访谈宪章、吸附、园艺 | `wiki-gardener` |
 | 执笔 / 事实审查 | `domain-expert` |
-| 思考 / 修订 / 呈现具体能力 | 对应 companion（**仅已装**） |
+| 思考 / 修订 / 学习 / 呈现具体能力 | 对应 companion（**仅已装**） |
 
 机制说明（装齐后）：仓库 `docs/companion协作流程.md`。
 
