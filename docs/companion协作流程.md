@@ -21,10 +21,11 @@
 | 思考 companion | `content-decomposer` | 对标拆解（有效/可参考/不可照搬/下一步） | 升格为领域定论 |
 | 修订 companion | `review-reviser` | 按专家审查报告逐条修订草稿 | 自行判定通过、吸附 |
 | 学习 companion | `knowledge-quiz` | 基于已入库知识测验并记录错题与掌握结果 | 把测验记录送入 inbox、替专家改来源事实 |
+| 呈现 companion | `human-writing` | 中文外化 / 人味改写（**视觉呈现之前**） | 吸附、改领域对错 |
 | 呈现 companion | `knowledge-map` | 只读知识与学习记录，生成知识图 | 修改掌握状态、吸附 |
-| 呈现 companion | `frontend-slides` | HTML 演示 | 吸附 |
-| 呈现 companion | `ian-xiaohei-illustrations` | 正文配图 | 吸附 |
-| 呈现 companion | `gbro-cover-design` | 封面提示词（可选 MCP 直出） | 吸附 |
+| 呈现 companion | `frontend-slides` | HTML 演示（宜接外化稿） | 吸附 |
+| 呈现 companion | `ian-xiaohei-illustrations` | 正文配图（宜接外化稿） | 吸附 |
+| 呈现 companion | `gbro-cover-design` | 封面提示词（宜接外化稿；可选 MCP 直出） | 吸附 |
 
 **唤起前提**：全量安装（`./scripts/install_skills.sh` 或 `--skill '*'`）会带上全部 companion。也可**选装**：只装核心，或按需 `--skill grill-me` 等。  
 setup 会按 `assets/companion-catalog.json` 探测 `~/.agents/skills`、`~/.claude/skills`、`~/.codex/skills`、`~/.cursor/skills` 与工作区 `.cursor/skills`：**未装则推荐命令，不假装已可唤起**。详见 setup skill 的「1b. 可选安装推荐」。
@@ -50,6 +51,7 @@ setup 会按 `assets/companion-catalog.json` 探测 `~/.agents/skills`、`~/.cla
 | 「按审查报告修订这篇」 | `review-reviser` | finding 处理账本 + high 项复审 |
 | 「考我 / 知识测验 / 理解检查 / 错题复习」 | `knowledge-quiz` | 已入库知识 → `00_系统/学习记录/` |
 | 「知识地图 / 思维导图 / 结构化理解 / 掌握地图」 | `knowledge-map` | 只读汇总 → `90_export/` |
+| 「外化 / 去AI味 / 活人感 / 中文改稿」 | `human-writing` | description + `90_export` |
 | 「做成 HTML 演示 / PPT 转换 / PDF 导出 / 配图 / 封面」 | 对应呈现包 | description + `90_export` |
 
 ---
@@ -61,7 +63,8 @@ setup 会按 `assets/companion-catalog.json` 探测 `~/.agents/skills`、`~/.cla
     → 成文 / 审查（domain-expert）→ 按需修订（review-reviser）→ 10_inbox/
     → 吸附（wiki-gardener）→ 20_领域/
     → 学习检查（knowledge-quiz）→ 00_系统/学习记录/ → 知识图（knowledge-map）→ 90_export/
-    → 对外呈现（呈现 companion）→ 90_export/
+    → 【外化】中文人味改写（human-writing，可选）→ 90_export/
+    → 【呈现】slides / 配图 / 封面（读外化稿或用户坚持的原稿）→ 90_export/
 ```
 
 ```mermaid
@@ -80,7 +83,10 @@ flowchart LR
   quiz --> learn[00_系统/学习记录]
   learn --> map[knowledge-map]
   map --> exportDir
-  domain --> present[呈现 companion]
+  domain --> outward[human-writing外化]
+  outward --> exportDir
+  outward --> present[视觉呈现]
+  domain -->|"用户跳过外化"| present
   present --> exportDir[90_export]
 ```
 
@@ -104,9 +110,21 @@ flowchart LR
 
 ### 3.3 呈现支路（细则）
 
-- 输入：已成稿笔记或 `10_inbox/` 草稿均可。  
+呈现支路分两拍，顺序固定：**先外化（人味），再视觉呈现**。两者都进 `90_export/`，都不写 `20_领域/`。
+
+#### 3.3-a 外化：人味改写（`human-writing`）
+
+- 输入：`20_领域/` 或 `10_inbox/` 成稿。
+- 职责：只改「怎么说」（活人感 / 去 AI 味）；不增事实；默认写出 `90_export/*-外化.md`。
+- 设计要点：`skills/human-writing/docs/为什么写得好.md`；评测：`tests/eval-runs/prose-ab-2026-08-07/`。
+- 交稿后**主动问一句**是否继续演示 / 配图 / 封面（可跳过）。
+
+#### 3.3-b 视觉呈现（slides / 配图 / 封面）
+
+- 输入：已成稿笔记、`10_inbox/` 草稿，或 **`90_export/` 里已有的外化稿**。
+- **软建议（中文对外）**：用户直接要演示 / 配图 / 封面，且正文是中文知识外发时，先问一句——「要不要先用 `human-writing` 做外化改稿再呈现？」。用户说跳过或已有外化稿 → 直接呈现；**不要**不经允许强制先跑外化。
 - 输出：**仅** `90_export/`（或用户指定路径）。`frontend-slides` 还支持 PPT/PPTX 转 HTML、PDF 导出和用户确认后的在线部署。
-- **禁止**写入 `20_领域/`；误进 inbox 时园丁应提示挪到导出目录，不当作吸附成功。  
+- **禁止**写入 `20_领域/`；误进 inbox 时园丁应提示挪到导出目录，不当作吸附成功。
 - **可选 MCP（宿主级）**：本机接好 `mcp-image` / `luma-vision` 时，`ian-xiaohei` 可直出配图、`gbro-cover` 在出提示词后可选直出封面；未配置则提示词 / shot list 回退。说明见 [MCP-图像能力.md](./MCP-图像能力.md)。核心 skill **不**硬绑 MCP。
 
 ### 3.4 学习支路（细则）
@@ -126,7 +144,7 @@ flowchart LR
 | 按审查报告修订后的草稿 + finding 处理账本 | `10_inbox/` | 保持 `status: draft`，复审通过后再由用户确认状态 |
 | 测验结果 / 错题 / 掌握证据 | `00_系统/学习记录/` | 系统资产；不进 inbox，不参与吸附 |
 | 已吸附笔记 | `20_领域/` | 仅园丁吸附后写入 |
-| 知识图 / HTML / 配图 / 封面提示词（及可选 MCP 成品图） | `90_export/` | 只读呈现，不进吸附主路径，不修改掌握状态 |
+| 知识图 / 中文外化稿 / HTML / 配图 / 封面提示词（及可选 MCP 成品图） | `90_export/` | 只读呈现，不进吸附主路径，不修改掌握状态 |
 | 拒收供体 | `90_archive/` | 园丁归档 |
 
 ---
@@ -150,6 +168,8 @@ python3 -m pytest -v tests/test_companion_pipeline.py tests/test_skills_layout.p
 - C3-a grill → 专家  
 - C3-b decomposer → inbox → 吸附  
 - C3-c 呈现类拒绝进 `20_领域/`  
+- C3-i 中文外化 human-writing → `90_export/`  
+- C3-j 呈现前软建议外化  
 - C3-d 脚本检查不绕过存在性  
 - C3-e 呈现 MCP 软接线（有则直出、无则提示词回退）  
 - C3-f 审查 → 修订 → high 项复审 → 吸附
@@ -165,7 +185,8 @@ python3 -m pytest -v tests/test_companion_pipeline.py tests/test_skills_layout.p
 | 说了「grill / 拆对标 / 考我」却无对应技能 | `npx skills list -g` 是否有包；是否只用了局部 `--skill` 安装 |
 | Agent 自称有 companion 但本机没有 | 违反 setup「勿编造」；重装全量或改接线 |
 | 糊想法被园丁直接写成 `20_领域/` | 园丁须交接 grill/专家；对照 EVAL B3-E / C3-a |
-| PPT/封面进了领域树 | 呈现包 / 园丁接线失败；对照 C3-c |
+| PPT/封面/外化稿进了领域树 | 呈现包 / 园丁接线失败；对照 C3-c / C3-i |
+| 外化时编造了库里没有的经历 | `human-writing` 须守信息保真；对照 prose-ab 与 `docs/为什么写得好.md` |
 | 测验记录进了 inbox | 学习落点错误；应移到 `00_系统/学习记录/`，不触发吸附 |
 | 知识图改了掌握状态 | `knowledge-map` 越权；它只能读取和呈现 |
 | 只跑了 script-flow 就当可拍入库 | 违反存在性先于形态性；对照 C3-d |

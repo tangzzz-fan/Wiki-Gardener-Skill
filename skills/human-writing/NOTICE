@@ -1,0 +1,10 @@
+NOTICE
+本目录自 https://github.com/KKKKhazix/human-writing（MIT）迁入，写作规则与 `scripts/check_prose.py` 保留上游全文，便于与本仓库其它 companion 同级安装与调教。
+
+本仓库适配层见 `SKILL.md` 开头「本仓库接线」：
+- 默认输出 `90_export/`（或用户指定导出路径）
+- 禁止写入 `20_领域/`
+- 不替代 `domain-expert` / `wiki-gardener`
+
+学习改调时可先读同目录 `docs/为什么写得好.md`（对照本库 prose-ab 评测）。
+上游版权声明见 `LICENSE`；版本见 `VERSION`。

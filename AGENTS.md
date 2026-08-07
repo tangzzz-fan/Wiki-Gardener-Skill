@@ -48,7 +48,7 @@
 | 内容思考 | `grill-me`、`topic-resonate`、`content-diagnose`、`script-flow`、`content-decomposer` | 想清楚 / 拆对标；产物默认可进 `10_inbox/`，不直写 `20_领域/` |
 | 内容修订 | `review-reviser` | 按审查 finding 修订 `10_inbox/` 草稿；high 项交回专家复审，不自行吸附 |
 | 学习检查 | `knowledge-quiz` | 只读已入库知识出题；结果进 `00_系统/学习记录/`，不进 `10_inbox/` |
-| 内容呈现 | `frontend-slides`、`ian-xiaohei-illustrations`、`gbro-cover-design` | 从成稿导出演示/配图/封面；默认 `90_export/`（或用户指定路径），不进吸附主路径 |
+| 内容呈现 | `human-writing`（外化/人味，**先于**视觉呈现）、`frontend-slides`、`ian-xiaohei-illustrations`、`gbro-cover-design` | 外化稿与演示/配图/封面默认 `90_export/`；中文对外时呈现类软建议先外化；不进吸附主路径 |
 | 学习呈现 | `knowledge-map` | 只读已入库知识与学习记录生成知识图；默认 `90_export/`，不得修改掌握状态 |
 
 核心 trio 职责不变：园丁管结构、专家管单篇对错、setup 只管指路。Companion 不得把自媒体写死进核心 SKILL。

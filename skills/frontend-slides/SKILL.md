@@ -69,6 +69,7 @@ Before delivery, verify:
 
 1. Write decks to vault or workspace `90_export/` by default, unless the user names another path.
 2. Never write HTML decks into `20_领域/`.
-3. Source material may come from notes or `10_inbox/`; this skill presents it but does not decide knowledge absorption or factual correctness.
-4. Keep agent-facing output free of emoji; use text labels such as `[警告]`.
+3. Source material may come from notes, `10_inbox/`, or an existing `90_export/*-外化.md`. This skill presents it but does not decide knowledge absorption or factual correctness.
+4. **Chinese outward soft handoff:** If the source is Chinese knowledge prose meant for external audiences, ask once before building the deck whether to run `human-writing` first (外化 / 活人感 / 去AI味). If the user skips or already has an 外化 draft, continue with the chosen source. Do not force humanize.
+5. Keep agent-facing output free of emoji; use text labels such as `[警告]`.
 

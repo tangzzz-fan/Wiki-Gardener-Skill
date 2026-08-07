@@ -82,7 +82,7 @@ vault/
 
 - 用户扔来「对标视频/爆款拆解」且尚未成结构化笔记：可建议先跑 **`content-decomposer`**（按用户标准拆：有效 / 可参考 / 不可照搬 / 下一步），产物进 `10_inbox/` 后再吸附  
 - inbox 里已有 companion 诊断单/拆解稿：按普通材料走吸附；对标拆解默认当研读笔记，勿升格为未经核实的领域定论；低置信事实先走真实性关卡 / `domain-expert`  
-- **呈现类** companion（`frontend-slides` / 配图 / 封面）产物应在 `90_export/`，**不是**吸附对象；误放进 inbox 时提示用户挪到导出目录，勿挂进 `20_领域/`
+- **呈现类** companion：`human-writing`（外化，先于视觉呈现）/ `frontend-slides` / 配图 / 封面；产物应在 `90_export/`，**不是**吸附对象；误放进 inbox 时提示用户挪到导出目录，勿挂进 `20_领域/`
 
 ### 交接：学习 companion
 

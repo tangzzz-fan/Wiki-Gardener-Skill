@@ -7,7 +7,7 @@
 - 核心三件套：setup 引导、园丁初始化/吸附/园艺、领域专家执笔/审查
 - 思考 companion：grill、选题共鸣、内容诊断、口播逻辑、对标拆解
 - 修订 companion：按专家审查报告修订，修后按严重度复审
-- 呈现 companion：HTML 演示、正文配图、封面提示词
+- 呈现 companion：中文外化（`human-writing`）、HTML 演示、正文配图、封面提示词
 - 质量门禁：结构校验、无 emoji 检查、契约测试、打包烟测
 
 稳定不等于全部自动执行。`split`、`merge`、迁移、归档和拒收仍须人工批准。
@@ -17,7 +17,7 @@
 - 学习 companion 首版为可选能力：`knowledge-quiz` 基于已入库知识测验并写入 `00_系统/学习记录/`；`knowledge-map` 只读生成知识图并导出到 `90_export/`
 - `mcp-image` / `luma-vision` 是宿主级可选能力；未配置时配图和封面回退到提示词或 shot list
 - HTML 演示的在线部署与 PDF 导出依赖外部工具，使用前会单独确认
-- L2 Agent 行为评测仍是人工运行，不作为自动 CI 结论
+- prose-ab 文案对照（`tests/eval-runs/prose-ab-2026-08-07/`）：支持将 `human-writing` 作为可选外化后处理；勿写死进 `domain-expert` 铁律
 
 ## 后续路线
 

@@ -145,10 +145,51 @@ def test_expert_writing_dedupes_grill_and_offers_export():
     assert "帮我 grill 一下" in writing
     assert "90_export" in writing
     assert "frontend-slides" in writing or "呈现 companion" in writing
+    assert "human-writing" in writing
 
     expert = (SKILLS / "domain-expert" / "SKILL.md").read_text(encoding="utf-8")
     assert "已有 `grill-me` 共识提纲" in expert
     assert "review-reviser" in expert
+
+
+def test_human_writing_presenting_contract():
+    """外化 companion：90_export、禁写领域树、不替代专家、含触发语。"""
+    entries = {item["name"]: item for item in CATALOG}
+    hw = entries["human-writing"]
+    assert hw["category"] == "presenting"
+    assert hw["default_sink"] == "90_export"
+    for phrase in ("外化", "去AI味", "活人感", "中文改稿"):
+        assert phrase in hw["invoke_phrases"]
+
+    text = (SKILLS / "human-writing" / "SKILL.md").read_text(encoding="utf-8")
+    assert "90_export" in text
+    assert "20_领域" in text
+    assert "禁止" in text
+    assert "domain-expert" in text
+    assert "check_prose.py" in text
+    assert "frontend-slides" in text or "配图" in text
+    assert "交到呈现" in text or "接着做" in text
+    assert (SKILLS / "human-writing" / "scripts" / "check_prose.py").is_file()
+    assert (SKILLS / "human-writing" / "docs" / "为什么写得好.md").is_file()
+    assert (SKILLS / "human-writing" / "NOTICE").is_file()
+
+
+def test_visual_present_soft_suggests_human_writing_first():
+    """视觉呈现：中文外发时软建议先 human-writing，不强制。"""
+    for name in (
+        "frontend-slides",
+        "ian-xiaohei-illustrations",
+        "gbro-cover-design",
+    ):
+        text = (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
+        assert "human-writing" in text, name
+        assert "外化" in text or "活人感" in text or "去AI味" in text, name
+        assert "跳过" in text or "不要强制" in text or "Do not force" in text, name
+
+    flow = (ROOT / "docs" / "companion协作流程.md").read_text(encoding="utf-8")
+    assert "先外化" in flow or "人味" in flow
+    assert "软建议" in flow
+    assert "3.3-a" in flow and "3.3-b" in flow
 
 
 def test_thinking_handoff_chain():
@@ -331,6 +372,9 @@ def test_eval_and_flow_doc_cover_companion_evoke():
     assert "来源锚点" in eval_md
     assert "不修改 `00_系统/学习记录/`" in eval_md
     assert "domain-expert" in eval_md
+    assert "human-writing" in eval_md
+    assert "中文外化" in eval_md
+    assert "呈现前软建议外化" in eval_md or "C3-j" in eval_md
 
     flow = ROOT / "docs" / "companion协作流程.md"
     assert flow.is_file(), "missing docs/companion协作流程.md"

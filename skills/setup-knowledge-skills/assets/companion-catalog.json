@@ -58,6 +58,13 @@
       "default_sink": "90_export"
     },
     {
+      "name": "human-writing",
+      "category": "presenting",
+      "summary": "中文外化（人味改写），视觉呈现之前；默认 90_export/",
+      "invoke_phrases": ["外化", "去AI味", "活人感", "中文改稿"],
+      "default_sink": "90_export"
+    },
+    {
       "name": "frontend-slides",
       "category": "presenting",
       "summary": "新建或转换 HTML 演示，并可导出 PDF 或在线分享",

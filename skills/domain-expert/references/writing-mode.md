@@ -81,4 +81,7 @@
 
 **不自动进入审查**——写与审必须是两次独立调用（用户明确要求"写完直接审"时，也要显式切换姿态：清空执笔思路，以第一次阅读的姿态重读）。
 
-可选下一步（用户主动要时）：定稿后可用呈现 companion 导出到 `90_export/`——`frontend-slides`（HTML 演示）、`ian-xiaohei-illustrations`（配图）、`gbro-cover-design`（封面）。呈现物不进 `20_领域/`。
+可选下一步（用户主动要时）：
+- **先外化、再呈现**：中文对外发布前，用 `human-writing` 做外化 / 去AI味 / 活人感改稿（`90_export/`）；然后再演示 / 配图 / 封面。
+- 用户直接要演示 / 配图 / 封面时：呈现类会软建议是否先外化；用户可跳过。
+- 视觉呈现：`frontend-slides`（HTML 演示）、`ian-xiaohei-illustrations`（配图）、`gbro-cover-design`（封面）。呈现物不进 `20_领域/`。

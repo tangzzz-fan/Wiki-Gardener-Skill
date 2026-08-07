@@ -108,6 +108,7 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
 
 ```bash
 npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y \
+  --skill human-writing \
   --skill frontend-slides --skill ian-xiaohei-illustrations --skill gbro-cover-design
 ```
 
@@ -177,12 +178,13 @@ npx skills@latest add tangzzz-fan/Wiki-Gardener-Skill -g -y --skill '*'
 | 审查报告要求修订（需已装 review-reviser） | 「按审查报告修订这篇草稿」→ **review-reviser**；high 项修后交专家复审 |
 | 检查已入库知识掌握度（需已装 knowledge-quiz） | 「用已入库知识考我」→ **knowledge-quiz**；记录进 `00_系统/学习记录/` |
 | 看知识结构与掌握情况（需已装 knowledge-map） | 「把已入库知识做成掌握地图」→ **knowledge-map**；只读笔记与学习记录，导出到 `90_export/` |
+| 中文外化 / 去AI味 / 活人感（需已装 human-writing） | 「把这篇外化成中文长帖」→ **human-writing** → `90_export/` |
 | 刚 update，要刷新说明 | 本 skill：探测 companion + 重写 `技能包说明.md` 的「更新提示」节 |
 | 更新技能包 | 「在终端执行：`npx skills@latest update -g -y`」，然后再跑本 setup |
 
 思考链路（已装齐时对人一句）：
 
-> 想清楚：grill / resonate → diagnose →（口播）script-flow / decomposer → 专家成文进 `10_inbox/` → 园丁吸附。呈现类进 `90_export/`。
+> 想清楚：grill / resonate → diagnose →（口播）script-flow / decomposer → 专家成文进 `10_inbox/` → 园丁吸附。外化（`human-writing`）在视觉呈现之前；演示/配图/封面进 `90_export/`。
 
 学习支路（相关包已装时对人一句）：
 

@@ -22,7 +22,8 @@
 | `review-reviser/` | 修订 | 按专家审查报告逐条修订 → 复审 |
 | `knowledge-quiz/` | 学习 | 基于已入库知识做测验 → `00_系统/学习记录/` |
 | `knowledge-map/` | 呈现 | 只读知识与学习记录，导出知识图 → `90_export/` |
-| `frontend-slides/` | 呈现 | 脚本/文稿 → HTML 演示；导出到 `90_export/` |
+| `human-writing/` | 呈现（外化） | 中文人味改写，**视觉呈现之前** → `90_export/`；见 `docs/为什么写得好.md` |
+| `frontend-slides/` | 呈现 | 脚本/文稿 → HTML 演示（可软建议先外化）；导出到 `90_export/` |
 | `ian-xiaohei-illustrations/` | 呈现 | 正文配图；本机有 `mcp-image` 时可直出 |
 | `gbro-cover-design/` | 呈现 | 封面提示词（可选 MCP 直出；本地 `config.md` 不入库） |
 
